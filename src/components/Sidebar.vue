@@ -11,7 +11,7 @@
                         </a>
                     </div>
                     <div class="align-self-center mr-3">
-                        3
+                        {{ summary.numOfTodosToday }}
                     </div>
                 </li>
                 <li class="nav-item d-flex">
@@ -23,7 +23,7 @@
                         </a>
                     </div>
                     <div class="align-self-center mr-3">
-                        7
+                        {{ summary.numOfTodosThisWeek }}
                     </div>
                 </li>
                 <li class="nav-item d-flex">
@@ -35,7 +35,7 @@
                         </a>
                     </div>
                     <div class="align-self-center mr-3">
-                        2
+                        {{ summary.numOfTodosLater }}
                     </div>
                 </li>
             </ul>
@@ -45,48 +45,15 @@
                 Projects
             </h6>
             <ul class="nav flex-column mb-2">
-                <li class="nav-item d-flex">
+                <li v-for="project in projects" class="nav-item d-flex">
                     <div class="align-self-center flex-grow-1">
                         <a class="nav-link" href="#">
                             <span data-feather="file-text"></span>
-                            Inbox
+                            {{ project.projectName }}
                         </a>
                     </div>
                     <div class="align-self-center mr-3">
-                        10
-                    </div>
-                </li>
-                <li class="nav-item d-flex">
-                    <div class="align-self-center flex-grow-1">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Bitcoin
-                        </a>
-                    </div>
-                    <div class="align-self-center mr-3">
-                        1
-                    </div>
-                </li>
-                <li class="nav-item d-flex">
-                    <div class="align-self-center flex-grow-1">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Recreational Reading
-                        </a>
-                    </div>
-                    <div class="align-self-center mr-3">
-                        2
-                    </div>
-                </li>
-                <li class="nav-item d-flex">
-                    <div class="align-self-center flex-grow-1">
-                        <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
-                            Regular Expression
-                        </a>
-                    </div>
-                    <div class="align-self-center mr-3">
-                        1
+                        {{ project.numOfTodos }}
                     </div>
                 </li>
             </ul>
@@ -99,7 +66,37 @@
 
 <script>
 export default {
-
+    data: function() {
+        return {
+            projects: [
+                {
+                    projectName: "Inbox",
+                    projectId: 1,
+                    numOfTodos: 7
+                },
+                {
+                    projectName: "Bitcoin",
+                    projectId: 2,
+                    numOfTodos: 1
+                },
+                {
+                    projectName: "Recreational Reading",
+                    projectId: 3,
+                    numOfTodos: 3
+                },
+                {
+                    projectName: "Regular Expression",
+                    projectId: 4,
+                    numOfTodos: 5
+                }
+            ],
+            summary : {
+                numOfTodosToday : 3,
+                numOfTodosThisWeek : 6,
+                numOfTodosLater: 5
+            }
+        }
+    }
 }
 </script>
 
