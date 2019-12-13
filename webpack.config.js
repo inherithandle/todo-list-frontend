@@ -13,7 +13,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(s?css)$/,
+        test: /\.(scss)$/,
         use: [
           {
             // Adds CSS to the DOM by injecting a `<style>` tag
@@ -39,6 +39,10 @@ module.exports = {
             loader: 'sass-loader'
           }
         ]
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
       },
 	  {
 	    test: /\.vue$/,
