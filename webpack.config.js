@@ -3,6 +3,7 @@ const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack')
 
 module.exports = {
   entry: './src/js/app.js',
@@ -41,6 +42,15 @@ module.exports = {
         ]
       },
       {
+        test: /\.(jpe?g|png|gif)$/i, // jquery datepicker가 png를 사용하고 있음. jquery 제가할때 같이 제거.
+        loader:"file-loader",
+        options:{
+          name:'[name].[ext]',
+          outputPath:'assets/images/'
+          //the images will be emited to dist/assets/images/ folder
+        }
+      },
+      {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader']
       },
@@ -54,6 +64,12 @@ module.exports = {
 	new VueLoaderPlugin(),
 	new CopyPlugin([
 	  { from: 'src/html', to: './html' }
-	])
+	]),
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery'",
+      "window.$": "jquery"
+    })
   ]
 }

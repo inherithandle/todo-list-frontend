@@ -1,10 +1,13 @@
 <template>
     <div class="row">
         <!-- sidebar -->
-        <Sidebar></Sidebar>
+        <Sidebar
+        v-on:summary-clicked="summaryClicked"
+        v-on:project-clicked="projectClicked"
+        ></Sidebar>
         <main role="main" class="col-md-10 ml-sm-auto px-4">
             <div class="pt-3 pb-2 mb-3 border-bottom">
-                <h3>오늘</h3>
+                <h3>{{ currentScreen.title }}</h3>
             </div>
 
             <div class="d-flex mb-3">
@@ -35,7 +38,7 @@
                             2019-12-10
                         </div>
                         <div class="align-self-center">
-                            <button class="btn"><i class="fas fa-calendar-alt"></i></button>
+                            <DatePicker></DatePicker>
                         </div>
                         <!-- X표시 -->
                         <div class="align-self-center">
@@ -55,7 +58,7 @@
                             2019-12-25
                         </div>
                         <div class="align-self-center">
-                            <button class="btn"><i class="fas fa-calendar-alt"></i></button>
+                            <DatePicker></DatePicker>
                         </div>
                         <!-- X표시 -->
                         <div class="align-self-center">
@@ -107,9 +110,28 @@
 
 <script>
 import Sidebar from './Sidebar.vue'
+import DatePicker from './DatePicker.vue'
 export default {
+    data: function() {
+        return {
+            currentScreen: {
+                title: '오늘'
+            }
+        }
+    },
     components: {
+        DatePicker,
         Sidebar
+    },
+    methods: {
+        summaryClicked: function(labelForSummary) {
+            this.currentScreen.title = labelForSummary
+            // call rest api
+        },
+        projectClicked: function(label) {
+            this.currentScreen.title = label
+            // call rest api
+        }
     }
 }
 </script>
