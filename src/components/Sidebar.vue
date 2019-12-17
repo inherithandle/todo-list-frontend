@@ -58,7 +58,7 @@
                 </li>
             </ul>
             <div>
-                <button class="add btn btn-primary font-weight-bold todo-list-add-btn ml-3 ">프로젝트 추가</button>
+                <button class="add btn btn-primary font-weight-bold todo-list-add-btn ml-3" data-toggle="modal" data-target="#addProjectModal">프로젝트 추가</button>
             </div>
         </div>
     </nav>

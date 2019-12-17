@@ -15,7 +15,11 @@
                     <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
                 </div>
                 <div class="mr-2">
-                    <button class="add btn btn-primary font-weight-bold todo-list-add-btn">마감일 설정하기</button>
+w                    <DatePicker
+                      v-on:update-date="dateUpdated"
+                      picker-id="new-todo-datepicker"
+                      input-type="button"
+                    ></DatePicker>
                 </div>
                 <div class="mr-2">
                     <button class="add btn btn-primary font-weight-bold todo-list-add-btn">추가</button>
@@ -38,7 +42,12 @@
                             2019-12-10
                         </div>
                         <div class="align-self-center">
-                            <DatePicker></DatePicker>
+                            <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
+                            <DatePicker
+                              v-on:update-date="dateUpdated"
+                              picker-id="todo-datepicker-1"
+                              input-type="icon"
+                            ></DatePicker>
                         </div>
                         <!-- X표시 -->
                         <div class="align-self-center">
@@ -58,7 +67,11 @@
                             2019-12-25
                         </div>
                         <div class="align-self-center">
-                            <DatePicker></DatePicker>
+                            <DatePicker
+                              v-on:update-date="dateUpdated"
+                              picker-id="todo-datepicker-2"
+                              input-type="icon"
+                            ></DatePicker>
                         </div>
                         <!-- X표시 -->
                         <div class="align-self-center">
@@ -131,6 +144,10 @@ export default {
         projectClicked: function(label) {
             this.currentScreen.title = label
             // call rest api
+        },
+        dateUpdated: function(d) {
+            console.log('datepicker picked!')
+            console.log(d)
         }
     }
 }

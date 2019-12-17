@@ -1,6 +1,8 @@
 <template>
-
   <div>
+    <AddProjectModal
+      modal-id="addProjectModal"
+    ></AddProjectModal>
     <Navigationbar></Navigationbar>
     <div class="container-fluid">
       <!-- main (sidebar + body) -->
@@ -12,6 +14,7 @@
 <script>
 import Navigationbar from './Navbar.vue'
 import TodoBody from './TodoBody.vue'
+import AddProjectModal from './AddProjectModal.vue'
 
 export default {
   data: function() {
@@ -21,7 +24,8 @@ export default {
   },
   components: {
     Navigationbar,
-    TodoBody
+    TodoBody,
+    AddProjectModal
   }
 }
 </script>
