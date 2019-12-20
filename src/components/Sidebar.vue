@@ -52,8 +52,11 @@
                             {{ project.projectName }}
                         </a>
                     </div>
-                    <div class="align-self-center mr-3">
+                    <div class="align-self-center">
                         {{ project.numOfTodos }}
+                    </div>
+                    <div class="align-self-center">
+                        <button class="btn" @click.stop="projectDeleted"><i class="fas fa-trash"></i></button>
                     </div>
                 </li>
             </ul>
@@ -109,6 +112,9 @@ export default {
             this.activeProject = index
             this.summary.active = 4
             this.$emit('project-clicked', projectName)
+        },
+        projectDeleted: function() {
+            alert('trash can!')
         }
     }
 }

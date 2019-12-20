@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div id="app">
     <AddProjectModal
       modal-id="addProjectModal"
     ></AddProjectModal>
     <Navigationbar></Navigationbar>
     <div class="container-fluid">
       <!-- main (sidebar + body) -->
-      <TodoBody></TodoBody>
+      <router-view></router-view>
     </div>
   </div>
 </template>

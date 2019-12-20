@@ -15,7 +15,7 @@
                     <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
                 </div>
                 <div class="mr-2">
-w                    <DatePicker
+                    <DatePicker
                       v-on:update-date="dateUpdated"
                       picker-id="new-todo-datepicker"
                       input-type="button"
