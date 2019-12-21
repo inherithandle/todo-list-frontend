@@ -9,7 +9,7 @@
             <li class="nav-item text-nowrap px-3">
                 <a class="nav-link" href="#">{{"최규태"}}님</a>
             </li>
-            <li class="nav-item text-nowrap px-3">
+            <li class="nav-item text-nowrap px-3" @click="signoutClicked">
                 <router-link to="/signin" class="nav-link">Sign out</router-link>
             </li>
       </ul>
@@ -17,11 +17,15 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie'
 export default {
-  methods: {
+    methods: {
         searchButtonClicked(e) {
-            alert('search btn clicked')
-        }
-  }
+        alert('search btn clicked')
+    },
+    signoutClicked() {
+        Cookies.remove('access-token')
+    }
+    }
 }
 </script>

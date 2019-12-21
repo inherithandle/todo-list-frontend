@@ -6,6 +6,8 @@ const CopyPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
+  mode: 'development',
+  devtool: 'inline-source-map',
   entry: './src/js/app.js',
   output: {
     filename: 'js/[name].js',
@@ -72,4 +74,14 @@ module.exports = {
       "window.$": "jquery"
     })
   ]
+}
+
+if (process.env.NODE_ENV == 'production') {
+  module.exports.plugins.push(new webpack.DefinePlugin({
+    API_URL: JSON.stringify('https://gtchoi.todolist.com')
+  }))
+} else if (process.env.NODE_ENV == 'development') {
+  module.exports.plugins.push(new webpack.DefinePlugin({
+    API_URL: JSON.stringify('http://localhost:8181')
+  }))
 }

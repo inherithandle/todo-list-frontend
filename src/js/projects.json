@@ -1,0 +1,25 @@
+[{
+  "projectNo": 2,
+  "projectName": "english",
+  "todos": [],
+  "selected": true,
+  "edited": false
+}, {
+  "projectNo": 1,
+  "projectName": "inbox",
+  "todos": [{
+    "id": 2,
+    "text": "wash my car",
+    "completed": false
+  }, {
+    "id": 3,
+    "text": "completed things",
+    "completed": true
+  }, {
+    "id": 1,
+    "text": "get my hands dirty",
+    "completed": false
+  }],
+  "selected": false,
+  "edited": false
+}]
