@@ -13,6 +13,10 @@ module.exports = {
     filename: 'js/[name].js',
     path: path.resolve(__dirname, 'dist')
   },
+  devServer: {
+    contentBase: './dist',
+    openPage: 'html/index.html'
+  },
   module: {
     rules: [
       {
