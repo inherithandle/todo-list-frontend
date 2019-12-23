@@ -124,13 +124,34 @@
 <script>
 import Sidebar from './Sidebar.vue'
 import DatePicker from './DatePicker.vue'
+import ApiFactory from '../js/api.js'
+
 export default {
     data: function() {
         return {
             currentScreen: {
                 title: '오늘'
-            }
+            },
+            api: null,
+            projects: {}
         }
+    },
+    mounted: async function() {
+        this.api = await ApiFactory.getAPI()
+        let response = await this.api.isValidAccessToken()
+        if (response.data.login) {
+            this.$store.commit({
+                type: 'login',
+                userId: response.data.userId,
+                login: response.data.login
+            })
+
+            // get projects
+            this.projects = await this.api.getProjects().data
+        } else {
+            this.$router.push('/signin')
+        }
+
     },
     components: {
         DatePicker,

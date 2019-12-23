@@ -17,7 +17,9 @@ export default {
   getProjects: function() {
     let deepCopiedProjects = JSON.parse(JSON.stringify(projects))
     this.numOfProjects = deepCopiedProjects.length
-    return deepCopiedProjects
+    let response = {}
+    response.data = deepCopiedProjects
+    return response
   },
   deleteTodo: async function(todoObj) {
     return {}
@@ -70,6 +72,8 @@ export default {
     //
     if (this.getCookie('access-token') == this.LOCAL_FAKE_ACCESS_TOKEN) {
       response.data.login = true
+      response.data.message = 'success'
+      response.data.userId = 'joma'
     } else {
       response.data.login = false
     }

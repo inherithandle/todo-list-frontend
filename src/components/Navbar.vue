@@ -7,7 +7,7 @@
       </form>
       <ul class="navbar-nav px-3" style="flex-direction: row;" v-if="this.$route.path != '/signin'">
             <li class="nav-item text-nowrap px-3">
-                <a class="nav-link" href="#">{{"최규태"}}님</a>
+                <a class="nav-link" href="#">{{ user.userId }}님</a>
             </li>
             <li class="nav-item text-nowrap px-3" @click="signoutClicked">
                 <router-link to="/signin" class="nav-link">Sign out</router-link>
@@ -17,15 +17,23 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Cookies from 'js-cookie'
 export default {
+    computed: mapState(['user']),
     methods: {
         searchButtonClicked(e) {
-        alert('search btn clicked')
-    },
-    signoutClicked() {
-        Cookies.remove('access-token')
-    }
+            alert('search btn clicked')
+        },
+
+        signoutClicked() {
+            Cookies.remove('access-token')
+            this.$store.commit({
+                type: 'login',
+                userId: '',
+                login: false
+            })
+        }
     }
 }
 </script>

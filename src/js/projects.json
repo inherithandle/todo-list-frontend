@@ -10,15 +10,18 @@
   "todos": [{
     "id": 2,
     "text": "wash my car",
-    "completed": false
+    "completed": false,
+    "projectNo": 1
   }, {
     "id": 3,
     "text": "completed things",
-    "completed": true
+    "completed": true,
+    "projectNo": 1
   }, {
     "id": 1,
     "text": "get my hands dirty",
-    "completed": false
+    "completed": false,
+    "projectNo": 1
   }],
   "selected": false,
   "edited": false

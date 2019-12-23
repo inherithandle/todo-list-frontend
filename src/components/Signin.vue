@@ -59,12 +59,16 @@
             signinClicked: async function() {
                 let response = await this.api.login(this.userId, this.password)
                 if (response.data.login) {
-                    console.log(`access token: ${response.data.accessToken}`)
                     Cookies.set('access-token', response.data.accessToken)
                     this.loginFailed = false
+
+                    this.$store.commit({
+                        type: 'login',
+                        userId: this.userId,
+                        login: response.data.login
+                    })
                     this.$router.push('/')
                 } else {
-                    /* TODO: bootstrap alert box를 제공하자. */
                     this.loginFailed = true
                 }
             }
