@@ -11,7 +11,7 @@
                         </a>
                     </div>
                     <div class="align-self-center mr-3">
-                        {{ summary.numOfTodosToday }}
+                        {{ numOfTodaySummary }}
                     </div>
                 </li>
                 <li class="nav-item d-flex" v-on:click="summaryClicked(1, '이번 주 할 일')">
@@ -23,7 +23,7 @@
                         </a>
                     </div>
                     <div class="align-self-center mr-3">
-                        {{ summary.numOfTodosThisWeek }}
+                        {{ numOfWeekSummary }}
                     </div>
                 </li>
                 <li class="nav-item d-flex" v-on:click="summaryClicked(2, '나중에 할 일')">
@@ -35,7 +35,7 @@
                         </a>
                     </div>
                     <div class="align-self-center mr-3">
-                        {{ summary.numOfTodosLater }}
+                        {{ numOfLaterSummary }}
                     </div>
                 </li>
             </ul>
@@ -53,7 +53,7 @@
                         </a>
                     </div>
                     <div class="align-self-center">
-                        {{ project.numOfTodos }}
+                        {{ project.todos.length }}
                     </div>
                     <div class="align-self-center">
                         <button class="btn" @click.stop="projectDeleted"><i class="fas fa-trash"></i></button>
@@ -68,32 +68,12 @@
 </template>
 
 <script>
+const NOT_SELECTED = -1
 export default {
+    props: ['projects', 'numOfTodaySummary', 'numOfWeekSummary', 'numOfLaterSummary'],
     data: function() {
         return {
             activeProject: -1,
-            projects: [
-                {
-                    projectName: "Inbox",
-                    projectId: 1,
-                    numOfTodos: 7
-                },
-                {
-                    projectName: "Bitcoin",
-                    projectId: 2,
-                    numOfTodos: 1
-                },
-                {
-                    projectName: "Recreational Reading",
-                    projectId: 3,
-                    numOfTodos: 3
-                },
-                {
-                    projectName: "Regular Expression",
-                    projectId: 4,
-                    numOfTodos: 5
-                }
-            ],
             summary : {
                 numOfTodosToday : 3,
                 numOfTodosThisWeek : 6,
@@ -104,14 +84,14 @@ export default {
     },
     methods: {
         summaryClicked: function(index, labelForSummary) {
-            this.activeProject = -1
+            this.activeProject = NOT_SELECTED
             this.summary.active = index
-            this.$emit('summary-clicked', labelForSummary)
+            this.$emit('summary-clicked', labelForSummary, index)
         },
         projectClicked: function(index, projectName) {
+            this.summary.active = NOT_SELECTED
             this.activeProject = index
-            this.summary.active = 4
-            this.$emit('project-clicked', projectName)
+            this.$emit('project-clicked', projectName, index)
         },
         projectDeleted: function() {
             alert('trash can!')

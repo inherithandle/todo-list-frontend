@@ -4,6 +4,10 @@
         <Sidebar
         v-on:summary-clicked="summaryClicked"
         v-on:project-clicked="projectClicked"
+        v-bind:projects="projects"
+        v-bind:num-of-today-summary="todaySummary.numOfTodos"
+        v-bind:num-of-week-summary="weekSummary.numOfTodos"
+        v-bind:num-of-later-summary="laterSummary.numOfTodos"
         ></Sidebar>
         <main role="main" class="col-md-10 ml-sm-auto px-4">
             <div class="pt-3 pb-2 mb-3 border-bottom">
@@ -26,95 +30,81 @@
                 </div>
             </div>
 
-            <div class="card-body ml-5 mr-5">
+            <div class="card-body ml-5 mr-5" v-if="currentScreen.isSummaryClicked">
+                <div v-for="project in currentSummary.projects">
+                    <h4 class="mb-4">{{ project.projectName }}</h4>
+                    <ul class="d-flex flex-column border">
+                        <li v-for="(todo, index) in project.todos" class="d-flex">
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="checkbox" type="checkbox"><i class="input-helper"></i></label>
+                            </div>
+                            <div class="align-self-center flex-grow-1">
+                                {{ todo.text }}
+                            </div>
+                            <div class="align-self-center">
+                                2019-12-10
+                            </div>
+                            <div class="align-self-center">
+                                <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
+                                <DatePicker
+                                        v-on:update-date="dateUpdated"
+                                        v-bind:picker-id="'todo-datepicker-' + index"
+                                        input-type="icon"
+                                ></DatePicker>
+                            </div>
+                            <div class="align-self-center">
+                                <button class="btn"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body ml-5 mr-5" v-if="!currentScreen.isSummaryClicked">
                 <h4 class="mb-4">해야할 일</h4>
                 <ul class="d-flex flex-column border">
-                    <li class="d-flex">
+                    <li v-for="(todo, index) in todos" class="d-flex">
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="checkbox" type="checkbox"><i class="input-helper"></i></label>
                         </div>
                         <div class="align-self-center flex-grow-1">
-                            For what reason would it be advisable.
+                            {{ todo.text }}
                         </div>
-
                         <div class="align-self-center">
                             2019-12-10
                         </div>
                         <div class="align-self-center">
                             <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
                             <DatePicker
-                              v-on:update-date="dateUpdated"
-                              picker-id="todo-datepicker-1"
-                              input-type="icon"
+                                    v-on:update-date="dateUpdated"
+                                    v-bind:picker-id="'todo-datepicker-' + index"
+                                    input-type="icon"
                             ></DatePicker>
                         </div>
-                        <!-- X표시 -->
                         <div class="align-self-center">
                             <button class="btn"><i class="fas fa-trash"></i></button>
                         </div>
                     </li>
-
-                    <li class="d-flex">
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="checkbox" type="checkbox"><i class="input-helper"></i></label>
-                        </div>
-                        <div class="align-self-center flex-grow-1">
-                            Wash dishes
-                        </div>
-                        <div class="align-self-center">
-                            2019-12-25
-                        </div>
-                        <div class="align-self-center">
-                            <DatePicker
-                              v-on:update-date="dateUpdated"
-                              picker-id="todo-datepicker-2"
-                              input-type="icon"
-                            ></DatePicker>
-                        </div>
-                        <!-- X표시 -->
-                        <div class="align-self-center">
-                            <button class="btn"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </li>
-
                 </ul>
 
                 <h4 class="mt-4 mb-4">처리 완료</h4>
                 <ul class="d-flex flex-column border">
-                    <li class="d-flex">
+                    <li v-for="todo in doneTodos" class="d-flex">
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="checkbox" type="checkbox" checked="true"><i class="input-helper"></i></label>
                         </div>
                         <div class="align-self-center flex-grow-1">
-                            <del>For what reason would it be advisable.</del>
+                            <del>{{ todo.text}}</del>
                         </div>
                         <div class="align-self-center">
-                            2019-12-10
-                        </div>
-                        <div class="align-self-center">
-                            <button class="btn"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </li>
-
-                    <li class="d-flex">
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input class="checkbox" type="checkbox" checked="true"><i class="input-helper"></i></label>
-                        </div>
-                        <div class="align-self-center flex-grow-1">
-                            <del>Wash dishes</del>
-                        </div>
-                        <div class="align-self-center">
-                            2019-12-25
+                            2019-12-10 <!-- TODO: local, backend due date 추가 -->
                         </div>
                         <div class="align-self-center">
                             <button class="btn"><i class="fas fa-trash"></i></button>
                         </div>
                     </li>
-
                 </ul>
             </div>
         </main>
@@ -125,15 +115,92 @@
 import Sidebar from './Sidebar.vue'
 import DatePicker from './DatePicker.vue'
 import ApiFactory from '../js/api.js'
+import DateUtil from '../js/date-util.js'
 
+const PROJECT_NOT_SELECTED = -1
 export default {
     data: function() {
         return {
             currentScreen: {
-                title: '오늘'
+                title: '오늘',
+                isSummaryClicked: true,
+                summaryIndex: 0
             },
             api: null,
-            projects: {}
+            projects: {},
+            currentIndex: PROJECT_NOT_SELECTED
+        }
+    },
+    computed: {
+        todos: function() {
+            if (this.currentIndex == PROJECT_NOT_SELECTED)
+                return []
+            return this.projects[this.currentIndex].todos.filter(todo => !todo.completed)
+        },
+        doneTodos: function() {
+            if (this.currentIndex == PROJECT_NOT_SELECTED)
+                return []
+            return this.projects[this.currentIndex].todos.filter(todo => todo.completed)
+        },
+        todaySummary: function() {
+            let summary = {}
+            summary.projects = []
+            summary.numOfTodos = 0
+
+            for (let i = 0; i < this.projects.length; i++) {
+                let project = {}
+                project.projectName = this.projects[i].projectName
+                project.todos = this.projects[i].todos.filter(todo => !todo.completed && DateUtil.isToday(todo.dueDate))
+
+                if (project.todos.length > 0) {
+                    summary.projects.push(project)
+                    summary.numOfTodos += project.todos.length
+                }
+            }
+            return summary
+
+        },
+        weekSummary: function() {
+            let summary = {}
+            summary.projects = []
+            summary.numOfTodos = 0
+
+            for (let i = 0; i < this.projects.length; i++) {
+                let project = {}
+                project.projectName = this.projects[i].projectName
+                project.todos = this.projects[i].todos.filter(todo => !todo.completed && DateUtil.isInDays(todo.dueDate, 7))
+
+                if (project.todos.length > 0) {
+                    summary.projects.push(project)
+                    summary.numOfTodos += project.todos.length
+                }
+            }
+            return summary
+        },
+        laterSummary: function() {
+            let summary = {}
+            summary.projects = []
+            summary.numOfTodos = 0
+
+            for (let i = 0; i < this.projects.length; i++) {
+                let project = {}
+                project.projectName = this.projects[i].projectName
+                project.todos = this.projects[i].todos.filter(todo => !todo.completed && DateUtil.isInDays(todo.dueDate, 30))
+
+                if (project.todos.length > 0) {
+                    summary.projects.push(project)
+                    summary.numOfTodos += project.todos.length
+                }
+            }
+            return summary
+        },
+        currentSummary: function() {
+            if (this.currentScreen.summaryIndex == 0)
+                return this.todaySummary
+            else if (this.currentScreen.summaryIndex == 1)
+                return this.weekSummary
+            else if (this.currentScreen.summaryIndex == 2)
+                return this.laterSummary
         }
     },
     mounted: async function() {
@@ -148,6 +215,8 @@ export default {
 
             // get projects
             this.projects = await this.api.getProjects().data
+            console.log('projects response')
+            console.log(this.projects)
         } else {
             this.$router.push('/signin')
         }
@@ -158,13 +227,15 @@ export default {
         Sidebar
     },
     methods: {
-        summaryClicked: function(labelForSummary) {
+        summaryClicked: function(labelForSummary, index) {
             this.currentScreen.title = labelForSummary
-            // call rest api
+            this.currentScreen.isSummaryClicked = true
+            this.currentScreen.summaryIndex = index
         },
-        projectClicked: function(label) {
+        projectClicked: function(label, index) {
             this.currentScreen.title = label
-            // call rest api
+            this.currentScreen.isSummaryClicked = false
+            this.currentIndex = index
         },
         dateUpdated: function(d) {
             console.log('datepicker picked!')
