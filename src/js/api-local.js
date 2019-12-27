@@ -30,7 +30,11 @@ export default {
     return {}
   },
   modifyTodo: async function(todoObj) {
-    return {}
+    let todo = this.getTodoByProjectNoAndTodoId(todoObj.id, todoObj.projectNo);
+    todo.completed = todoObj.completed
+    todo.text = todoObj.text
+    let response = {}
+    return response
   },
   addTodo: async function(todoObj) {
     todoObj.id = this.generateTodoId()
@@ -112,5 +116,19 @@ export default {
       }
     }
     return "";
+  },
+  getProjectByProjectNo: function(projectNo) {
+    let project = this.projects.find(p => p.projectNo == projectNo)
+    if (project === undefined) {
+      throw Error(`no such project with projectNo ${projectNo}`)
+    }
+    return project
+  },
+  getTodoByProjectNoAndTodoId: function(todoId, projectNo) {
+    let todo = this.getProjectByProjectNo(projectNo).todos.find(t => t.id == todoId)
+    if (todo === undefined) {
+      throw Error(`no such todo with todoId ${todoId}`)
+    }
+    return todo
   }
 }

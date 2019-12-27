@@ -52,7 +52,10 @@
                         <li v-for="(todo, index) in project.todos" class="d-flex" v-bind:key="todo.id">
                             <div class="form-check">
                                 <label class="form-check-label">
-                                    <input class="checkbox" type="checkbox"><i class="input-helper"></i></label>
+                                    <input class="checkbox" type="checkbox"
+                                           v-model="todo.completed"
+                                           @change="checkboxChanged(todo.id, todo.projectNo)"
+                                    ><i class="input-helper"></i></label>
                             </div>
                             <div class="align-self-center flex-grow-1">
                                 {{ todo.text }}
@@ -81,7 +84,10 @@
                     <li v-for="(todo, index) in todos" class="d-flex" v-bind:key="todo.id">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="checkbox" type="checkbox"><i class="input-helper"></i></label>
+                                <input class="checkbox" type="checkbox"
+                                       v-model="todo.completed"
+                                       @change="checkboxChanged(todo.id, todo.projectNo)"
+                                ><i class="input-helper"></i></label>
                         </div>
                         <div class="align-self-center flex-grow-1">
                             {{ todo.text }}
@@ -108,7 +114,10 @@
                     <li v-for="todo in doneTodos" class="d-flex" v-bind:key="todo.id">
                         <div class="form-check">
                             <label class="form-check-label">
-                                <input class="checkbox" type="checkbox" checked="true"><i class="input-helper"></i></label>
+                                <input class="checkbox" type="checkbox"
+                                       v-model="todo.completed"
+                                       @change="checkboxChanged(todo.id, todo.projectNo)"
+                                ><i class="input-helper"></i></label>
                         </div>
                         <div class="align-self-center flex-grow-1">
                             <del>{{ todo.text}}</del>
@@ -302,9 +311,27 @@ export default {
             let todoIndex = project.todos.findIndex(t => t.id == todoId)
             project.todos.splice(todoIndex, 1)
         },
+        checkboxChanged: async function(todoId, projectNo) {
+            let todo = this.getTodoByProjectNoAndTodoId(todoId, projectNo);
+            try {
+                await this.api.modifyTodo(todo)
+            } catch (error) {
+                todo.completed = !todo.completed
+            }
+        },
         getProjectByProjectNo: function(projectNo) {
-            let i = this.projects.findIndex(p => p.projectNo == projectNo)
-            return this.projects[i]
+            let project = this.projects.find(p => p.projectNo == projectNo)
+            if (project === undefined) {
+                throw Error(`no such project with projectNo ${projectNo}`)
+            }
+            return project
+        },
+        getTodoByProjectNoAndTodoId: function(todoId, projectNo) {
+            let todo = this.getProjectByProjectNo(projectNo).todos.find(t => t.id == todoId)
+            if (todo === undefined) {
+                throw Error(`no such todo with todoId ${todoId}`)
+            }
+            return todo
         }
     }
 }

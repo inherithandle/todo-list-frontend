@@ -30,7 +30,6 @@ describe('date-util-test', function() {
         assert.equal(projects[0].todos.length, 5)
         let todos = projects.filter(p => p.projectNo == PROJECT_NO)[0].todos
         let addedTodo = todos.filter(t => t.id == 6)[0]
-        console.log(`text : ${addedTodo.text}`)
         assert.equal(addedTodo.id, 6)
         assert.equal(addedTodo.text, 'hello')
         assert.equal(addedTodo.dueDate, '2019-12-25')
@@ -46,5 +45,36 @@ describe('date-util-test', function() {
         await Api.deleteTodo(todo)
         let projects = await Api.getProjects().data
         assert.equal(projects[0].todos.length, 4)
+    })
+
+    it('modifyTodo function', async function() {
+
+        /*
+        project.json,
+        {
+          "id": 2,
+          "text": "wash my car",
+          "completed": false,
+          "projectNo": 1,
+          "dueDate": "2019-12-24"
+        }
+        completed = true, wash my hand로 수정합니다.
+         */
+        let projects = await Api.getProjects().data
+        const modifiedText = "wash my hand"
+        let todo = {
+            "id": 2,
+            "text": modifiedText,
+            "completed": true,
+            "projectNo": 1,
+            "dueDate": "2019-12-24"
+        }
+
+        await Api.modifyTodo(todo)
+        projects = await Api.getProjects().data
+        let modifiedTodo = Api.getTodoByProjectNoAndTodoId(todo.id, todo.projectNo)
+
+        assert.equal(modifiedTodo.completed, true)
+        assert.equal(modifiedTodo.text, modifiedText)
     })
 })
