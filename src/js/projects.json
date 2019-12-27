@@ -20,6 +20,12 @@
       "completed": false,
       "projectNo": 1,
       "dueDate": "2019-12-23"
+    }, {
+      "id": 4,
+      "text": "Do it Later",
+      "completed": false,
+      "projectNo": 1,
+      "dueDate": "2019-12-31"
     }],
     "selected": false,
     "edited": false
@@ -27,7 +33,13 @@
   {
     "projectNo": 2,
     "projectName": "english",
-    "todos": [],
+    "todos": [{
+      "id": 5,
+      "text": "Read Wimpy Kid",
+      "completed": false,
+      "projectNo": 2,
+      "dueDate": "2019-12-31"
+      }],
     "selected": true,
     "edited": false
   }

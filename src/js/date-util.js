@@ -39,6 +39,14 @@ export default {
         date.setSeconds(0)
         date.setMilliseconds(0)
         return date
+    },
+    getNowString: function() {
+        let now = new Date()
+        return [
+            now.getFullYear(),
+            (now.getMonth()+1).toString().padStart(2, '0'), // getMonth() is zero-based
+            now.getDate().toString().padStart(2, '0')
+        ].join('-');
     }
 
 }

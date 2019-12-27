@@ -45,7 +45,7 @@
                 Projects
             </h6>
             <ul class="nav flex-column mb-2">
-                <li v-for="(project, index) in projects" class="nav-item d-flex" v-on:click="projectClicked(index, project.projectName)">
+                <li v-for="(project, index) in projects" v-bind:key="project.projectNo" class="nav-item d-flex" v-on:click="projectClicked(index, project.projectName)">
                     <div class="align-self-center flex-grow-1">
                         <a class="nav-link" :class="{ active: index === activeProject }" href="#">
                             <span data-feather="file-text"></span>
@@ -53,7 +53,7 @@
                         </a>
                     </div>
                     <div class="align-self-center">
-                        {{ project.todos.length }}
+                        {{ project.todos.filter(t => !t.completed).length }}
                     </div>
                     <div class="align-self-center">
                         <button class="btn" @click.stop="projectDeleted"><i class="fas fa-trash"></i></button>
@@ -75,9 +75,6 @@ export default {
         return {
             activeProject: -1,
             summary : {
-                numOfTodosToday : 3,
-                numOfTodosThisWeek : 6,
-                numOfTodosLater: 5,
                 active: 0
             }
         }

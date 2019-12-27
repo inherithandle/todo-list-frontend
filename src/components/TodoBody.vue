@@ -14,27 +14,42 @@
                 <h3>{{ currentScreen.title }}</h3>
             </div>
 
+            <div class="mb-3 alert alert-danger" role="alert" v-if="errors.length">
+                <ul>
+                    <li v-for="error in errors">
+                        {{ error }}
+                    </li>
+                </ul>
+            </div>
+
             <div class="d-flex mb-3">
-                <div class="mr-2 flex-grow-1">
-                    <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?">
+                <div class="flex-grow-1 alert alert-primary" role="alert" v-if="currentScreen.isSummaryClicked">
+                    Sidebar에서 Project를 선택하면, 할 일을 추가할 수 있습니다.
                 </div>
-                <div class="mr-2">
+                <div class="mr-2 flex-grow-1" v-if="!currentScreen.isSummaryClicked">
+                    <input v-model="newTodo.text" type="text" class="form-control todo-list-input" placeholder="할 일을 입력하세요.">
+                </div>
+                <div class="my-2 px-2" v-if="!currentScreen.isSummaryClicked && newTodo.dueDate.length">
+                    {{ newTodo.dueDate }}까지
+                </div>
+                <div class="mr-2" v-if="!currentScreen.isSummaryClicked">
                     <DatePicker
-                      v-on:update-date="dateUpdated"
+                      v-on:update-date="newTodoDatePickerUpdated"
                       picker-id="new-todo-datepicker"
                       input-type="button"
                     ></DatePicker>
                 </div>
-                <div class="mr-2">
-                    <button class="add btn btn-primary font-weight-bold todo-list-add-btn">추가</button>
+                <div class="mr-2" v-if="!currentScreen.isSummaryClicked">
+                    <button @click="addTodoButtonClicked" class="add btn btn-primary font-weight-bold todo-list-add-btn">추가</button>
                 </div>
+
             </div>
 
             <div class="card-body ml-5 mr-5" v-if="currentScreen.isSummaryClicked">
-                <div v-for="project in currentSummary.projects">
+                <div v-for="project in currentSummary.projects" v-bind:key="project.projectNo">
                     <h4 class="mb-4">{{ project.projectName }}</h4>
-                    <ul class="d-flex flex-column border">
-                        <li v-for="(todo, index) in project.todos" class="d-flex">
+                    <ul class="d-flex flex-column border" v-if="project.todos.length > 0">
+                        <li v-for="(todo, index) in project.todos" class="d-flex" v-bind:key="todo.id">
                             <div class="form-check">
                                 <label class="form-check-label">
                                     <input class="checkbox" type="checkbox"><i class="input-helper"></i></label>
@@ -43,7 +58,7 @@
                                 {{ todo.text }}
                             </div>
                             <div class="align-self-center">
-                                2019-12-10
+                                {{ todo.dueDate }}
                             </div>
                             <div class="align-self-center">
                                 <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
@@ -54,7 +69,7 @@
                                 ></DatePicker>
                             </div>
                             <div class="align-self-center">
-                                <button class="btn"><i class="fas fa-trash"></i></button>
+                                <button @click="deleteTodoBtnClicked(todo.id, todo.projectNo)" class="btn"><i class="fas fa-trash"></i></button>
                             </div>
                         </li>
                     </ul>
@@ -62,8 +77,8 @@
             </div>
             <div class="card-body ml-5 mr-5" v-if="!currentScreen.isSummaryClicked">
                 <h4 class="mb-4">해야할 일</h4>
-                <ul class="d-flex flex-column border">
-                    <li v-for="(todo, index) in todos" class="d-flex">
+                <ul class="d-flex flex-column border" v-if="projects[currentIndex].todos.length > 0">
+                    <li v-for="(todo, index) in todos" class="d-flex" v-bind:key="todo.id">
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="checkbox" type="checkbox"><i class="input-helper"></i></label>
@@ -72,7 +87,7 @@
                             {{ todo.text }}
                         </div>
                         <div class="align-self-center">
-                            2019-12-10
+                            {{ todo.dueDate }}
                         </div>
                         <div class="align-self-center">
                             <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
@@ -83,14 +98,14 @@
                             ></DatePicker>
                         </div>
                         <div class="align-self-center">
-                            <button class="btn"><i class="fas fa-trash"></i></button>
+                            <button class="btn" @click="deleteTodoBtnClicked(todo.id, todo.projectNo)"><i class="fas fa-trash"></i></button>
                         </div>
                     </li>
                 </ul>
 
                 <h4 class="mt-4 mb-4">처리 완료</h4>
-                <ul class="d-flex flex-column border">
-                    <li v-for="todo in doneTodos" class="d-flex">
+                <ul class="d-flex flex-column border" v-if="doneTodos.length > 0">
+                    <li v-for="todo in doneTodos" class="d-flex" v-bind:key="todo.id">
                         <div class="form-check">
                             <label class="form-check-label">
                                 <input class="checkbox" type="checkbox" checked="true"><i class="input-helper"></i></label>
@@ -126,6 +141,14 @@ export default {
                 isSummaryClicked: true,
                 summaryIndex: 0
             },
+            newTodo: {
+                id: 0,
+                text: '',
+                completed: false,
+                projectNo: 0,
+                dueDate: DateUtil.getNowString()
+            },
+            errors: [],
             api: null,
             projects: {},
             currentIndex: PROJECT_NOT_SELECTED
@@ -240,6 +263,48 @@ export default {
         dateUpdated: function(d) {
             console.log('datepicker picked!')
             console.log(d)
+        },
+        newTodoDatePickerUpdated: function(d) {
+            console.log(`newTodoDatePickerUpdated called: ${d}`)
+            this.newTodo.dueDate = d
+        },
+        addTodoButtonClicked: async function() {
+            this.errors = []
+            if (!this.newTodo.text) {
+                this.errors.push('할 일을 입력하세요.')
+            }
+            if (!this.newTodo.dueDate) {
+                this.errors.push('마감일을 설정하세요.')
+            }
+
+            let todo = {}
+            todo.projectNo = this.projects[this.currentIndex].projectNo
+            todo.text = this.newTodo.text
+            todo.completed = false
+            todo.dueDate = this.newTodo.dueDate
+            let response = await this.api.addTodo(todo)
+            todo.id = response.data.id
+            this.projects[this.currentIndex].todos.push(todo)
+
+            this.newTodo.id = 0
+            this.newTodo.text = ''
+            this.newTodo.completed = false
+            this.newTodo.projectNo = 0
+            this.newTodo.dueDate = DateUtil.getNowString()
+        },
+        deleteTodoBtnClicked: async function(todoId, projectNo) {
+            let todo = {}
+            todo.id = todoId
+            todo.projectNo = projectNo
+
+            await this.api.deleteTodo(todo)
+            let project = this.getProjectByProjectNo(projectNo)
+            let todoIndex = project.todos.findIndex(t => t.id == todoId)
+            project.todos.splice(todoIndex, 1)
+        },
+        getProjectByProjectNo: function(projectNo) {
+            let i = this.projects.findIndex(p => p.projectNo == projectNo)
+            return this.projects[i]
         }
     }
 }

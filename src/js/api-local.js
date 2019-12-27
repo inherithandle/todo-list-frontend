@@ -1,8 +1,7 @@
-import projects from './projects.json'
+import PROJECTS from './projects.json'
 
 export default {
   numOfProjects: 0,
-  numOfTodos: 0,
   user: [
     {
       username: "mayuko",
@@ -13,26 +12,46 @@ export default {
       password: "jo"
     }
   ],
+  projects: null,
   LOCAL_FAKE_ACCESS_TOKEN: 'abc',
   getProjects: function() {
-    let deepCopiedProjects = JSON.parse(JSON.stringify(projects))
-    this.numOfProjects = deepCopiedProjects.length
+    if (this.projects == null) {
+      this.projects = JSON.parse(JSON.stringify(PROJECTS))
+    }
+    let deepCopiedProjects = JSON.parse(JSON.stringify(this.projects))
     let response = {}
     response.data = deepCopiedProjects
     return response
   },
   deleteTodo: async function(todoObj) {
+    let project = this.projects.filter(p => p.projectNo == todoObj.projectNo)[0]
+    let todoIndex = project.todos.findIndex(t => t.id ==todoObj.id)
+    project.todos.splice(todoIndex, 1)
     return {}
   },
   modifyTodo: async function(todoObj) {
     return {}
   },
   addTodo: async function(todoObj) {
-    this.numOfTodos++
+    todoObj.id = this.generateTodoId()
+    let project = this.projects.filter(p => p.projectNo == todoObj.projectNo)[0]
+    project.todos.push(todoObj)
     let response = {}
     response.data = {}
-    response.data.id = this.numOfTodos
+    response.data.id = todoObj.id
     return response
+  },
+  generateTodoId: function() {
+    // find the maximum value of all todos.
+    // return the maximum value + 1
+    if (!this.projects) {
+      return 1
+    }
+
+    let maxId = this.projects.map(project => project.todos).flat(1)
+                             .map(todo => todo.id)
+                              .reduce((max, id) => max > id ? max : id, 0)
+    return maxId + 1
   },
   addProject: async function(projectObj) {
     this.numOfProjects++

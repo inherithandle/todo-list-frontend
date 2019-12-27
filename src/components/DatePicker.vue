@@ -15,6 +15,7 @@ export default {
             // buttonImageOnly: true,
             // buttonImage: "https://jqueryui.com/resources/demos/datepicker/images/calendar.gif",
             dateFormat: "yy-mm-dd",
+            minDate: 0,
             onSelect: function (d) {
                 self.$emit('update-date', d)
             }
