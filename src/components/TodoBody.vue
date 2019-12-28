@@ -49,7 +49,7 @@
                 <div v-for="project in currentSummary.projects" v-bind:key="project.projectNo">
                     <h4 class="mb-4">{{ project.projectName }}</h4>
                     <ul class="d-flex flex-column border" v-if="project.todos.length > 0">
-                        <li v-for="(todo, index) in project.todos" class="d-flex" v-bind:key="todo.id">
+                        <li v-for="todo in project.todos" class="d-flex" v-bind:key="todo.id">
                             <div class="form-check">
                                 <label class="form-check-label">
                                     <input class="checkbox" type="checkbox"
@@ -64,10 +64,9 @@
                                 {{ todo.dueDate }}
                             </div>
                             <div class="align-self-center">
-                                <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
                                 <DatePicker
-                                        v-on:update-date="dateUpdated"
-                                        v-bind:picker-id="'todo-datepicker-' + index"
+                                        v-on:update-date="dateUpdated($event, todo.id, todo.projectNo)"
+                                        v-bind:picker-id="'todo-datepicker-' + todo.id"
                                         input-type="icon"
                                 ></DatePicker>
                             </div>
@@ -98,7 +97,7 @@
                         <div class="align-self-center">
                             <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
                             <DatePicker
-                                    v-on:update-date="dateUpdated"
+                                    v-on:update-date="dateUpdated($event, todo.id, todo.projectNo)"
                                     v-bind:picker-id="'todo-datepicker-' + index"
                                     input-type="icon"
                             ></DatePicker>
@@ -123,7 +122,7 @@
                             <del>{{ todo.text}}</del>
                         </div>
                         <div class="align-self-center">
-                            2019-12-10 <!-- TODO: local, backend due date 추가 -->
+                            {{ todo.dueDate }}
                         </div>
                         <div class="align-self-center">
                             <button class="btn"><i class="fas fa-trash"></i></button>
@@ -269,12 +268,23 @@ export default {
             this.currentScreen.isSummaryClicked = false
             this.currentIndex = index
         },
-        dateUpdated: function(d) {
-            console.log('datepicker picked!')
-            console.log(d)
+        dateUpdated: async function(date, todoId, projectNo) {
+            console.log(date)
+            console.log(`todo id : ${todoId}`)
+            console.log(`project no : ${projectNo}`)
+
+            let todo = this.getTodoByProjectNoAndTodoId(todoId, projectNo);
+            let previousDate = todo.dueDate
+            todo.dueDate = date
+
+            try {
+                await this.api.modifyTodo(todo)
+            } catch (error) {
+                todo.dueDate = previousDate
+            }
         },
         newTodoDatePickerUpdated: function(d) {
-            console.log(`newTodoDatePickerUpdated called: ${d}`)
+            console.log(`newTodoDatePickerUpdated picked date: ${d}`)
             this.newTodo.dueDate = d
         },
         addTodoButtonClicked: async function() {

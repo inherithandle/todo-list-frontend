@@ -33,6 +33,7 @@ export default {
     let todo = this.getTodoByProjectNoAndTodoId(todoObj.id, todoObj.projectNo);
     todo.completed = todoObj.completed
     todo.text = todoObj.text
+    todo.dueDate = todoObj.dueDate
     let response = {}
     return response
   },

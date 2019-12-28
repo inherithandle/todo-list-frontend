@@ -58,7 +58,7 @@ describe('date-util-test', function() {
           "projectNo": 1,
           "dueDate": "2019-12-24"
         }
-        completed = true, wash my hand로 수정합니다.
+        completed = true, wash my hand로, 2019-12-31로 수정합니다.
          */
         let projects = await Api.getProjects().data
         const modifiedText = "wash my hand"
@@ -67,7 +67,7 @@ describe('date-util-test', function() {
             "text": modifiedText,
             "completed": true,
             "projectNo": 1,
-            "dueDate": "2019-12-24"
+            "dueDate": "2019-12-31"
         }
 
         await Api.modifyTodo(todo)
@@ -76,5 +76,6 @@ describe('date-util-test', function() {
 
         assert.equal(modifiedTodo.completed, true)
         assert.equal(modifiedTodo.text, modifiedText)
+        assert.equal(modifiedTodo.dueDate, "2019-12-31")
     })
 })
