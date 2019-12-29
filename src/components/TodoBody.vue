@@ -1,6 +1,5 @@
 <template>
     <div class="row">
-        <!-- sidebar -->
         <Sidebar
         v-on:summary-clicked="summaryClicked"
         v-on:project-clicked="projectClicked"
@@ -79,6 +78,9 @@
             </div>
             <div class="card-body ml-5 mr-5" v-if="!currentScreen.isSummaryClicked">
                 <h4 class="mb-4">해야할 일</h4>
+                <div class="flex-grow-1 alert alert-primary" role="alert" v-if="todos.length == 0">
+                    할 일을 추가하세요.
+                </div>
                 <ul class="d-flex flex-column border" v-if="projects[currentIndex].todos.length > 0">
                     <li v-for="(todo, index) in todos" class="d-flex" v-bind:key="todo.id">
                         <div class="form-check">
@@ -109,6 +111,9 @@
                 </ul>
 
                 <h4 class="mt-4 mb-4">처리 완료</h4>
+                <div class="flex-grow-1 alert alert-primary" role="alert" v-if="doneTodos.length == 0">
+                    완료한 일이 없습니다.
+                </div>
                 <ul class="d-flex flex-column border" v-if="doneTodos.length > 0">
                     <li v-for="todo in doneTodos" class="d-flex" v-bind:key="todo.id">
                         <div class="form-check">
@@ -137,11 +142,11 @@
 <script>
 import Sidebar from './Sidebar.vue'
 import DatePicker from './DatePicker.vue'
-import ApiFactory from '../js/api.js'
 import DateUtil from '../js/date-util.js'
 
 const PROJECT_NOT_SELECTED = -1
 export default {
+    props: ['api'],
     data: function() {
         return {
             currentScreen: {
@@ -157,7 +162,6 @@ export default {
                 dueDate: DateUtil.getNowString()
             },
             errors: [],
-            api: null,
             projects: {},
             currentIndex: PROJECT_NOT_SELECTED
         }
@@ -234,8 +238,13 @@ export default {
                 return this.laterSummary
         }
     },
+    created: function() {
+        this.$eventHub.$on('add-project-modal-submitted', this.addProject);
+    },
+    beforeDestroy() {
+        this.$eventHub.$off('add-project-modal-submitted');
+    },
     mounted: async function() {
-        this.api = await ApiFactory.getAPI()
         let response = await this.api.isValidAccessToken()
         if (response.data.login) {
             this.$store.commit({
@@ -296,20 +305,32 @@ export default {
                 this.errors.push('마감일을 설정하세요.')
             }
 
-            let todo = {}
-            todo.projectNo = this.projects[this.currentIndex].projectNo
-            todo.text = this.newTodo.text
-            todo.completed = false
-            todo.dueDate = this.newTodo.dueDate
-            let response = await this.api.addTodo(todo)
-            todo.id = response.data.id
-            this.projects[this.currentIndex].todos.push(todo)
+            if (this.errors.length == 0) {
+                let todo = {}
+                todo.projectNo = this.projects[this.currentIndex].projectNo
+                todo.text = this.newTodo.text
+                todo.completed = false
+                todo.dueDate = this.newTodo.dueDate
 
-            this.newTodo.id = 0
-            this.newTodo.text = ''
-            this.newTodo.completed = false
-            this.newTodo.projectNo = 0
-            this.newTodo.dueDate = DateUtil.getNowString()
+                let response = await this.api.addTodo(todo)
+                console.log(`todo length. ${this.projects[this.currentIndex].todos.length}`)
+
+                todo.id = response.data.id
+                this.projects[this.currentIndex].todos.push(todo)
+                console.log(`todo length. ${this.projects[this.currentIndex].todos.length}`)
+
+                this.newTodo.id = 0
+                this.newTodo.text = ''
+                this.newTodo.completed = false
+                this.newTodo.projectNo = 0
+                this.newTodo.dueDate = DateUtil.getNowString()
+            }
+        },
+        addProject: async function(project) {
+            let response = await this.api.addProject(project)
+            if (response.data.projectNo > 0) {
+                this.projects.push(response.data)
+            }
         },
         deleteTodoBtnClicked: async function(todoId, projectNo) {
             let todo = {}

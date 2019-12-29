@@ -14,6 +14,7 @@ import '@fortawesome/fontawesome-free/js/brands'
 import 'bootstrap'
 import 'webpack-jquery-ui';
 import 'webpack-jquery-ui/css';
+Vue.prototype.$eventHub = new Vue(); // Global event bus
 Vue.use(VueRouter)
 Vue.use(Vuex) // Vuex requires Promise. If your supporting browsers do not implement Promise (e.g. IE), you can use a polyfill library, such as es6-promise.
 

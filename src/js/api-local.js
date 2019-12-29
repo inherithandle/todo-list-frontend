@@ -1,7 +1,7 @@
 import PROJECTS from './projects.json'
 
 export default {
-  numOfProjects: 0,
+  numOfProjects: PROJECTS.length,
   user: [
     {
       username: "mayuko",
@@ -60,8 +60,14 @@ export default {
   },
   addProject: async function(projectObj) {
     this.numOfProjects++
+    let project = {}
+    project.projectName = projectObj.projectName
+    project.projectNo = this.numOfProjects
+    project.todos = []
+    this.projects.push(project)
+
     let response = {}
-    response.data = {}
+    response.data = projectObj
     response.data.projectNo = this.numOfProjects
     return response
   },

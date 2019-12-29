@@ -9,14 +9,21 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="mb-3 alert alert-danger" role="alert" v-if="errors.length">
+                        <ul>
+                            <li v-for="error in errors">
+                                {{ error }}
+                            </li>
+                        </ul>
+                    </div>
                     <div class="form-group">
                         <label for="project-name">프로젝트 이름</label>
-                        <input class="form-control" id="project-name" type="text">
+                        <input class="form-control" id="project-name" v-model="projectName" type="text">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary" v-on:click="AddProjectBtnClicked">프로젝트 추가</button>
+                    <button type="button" class="btn btn-primary" v-on:click="addProjectBtnClicked">프로젝트 추가</button>
                 </div>
             </div>
         </div>
@@ -29,13 +36,27 @@
         props: ['modal-id'],
         data: function() {
             return {
-                modalLabel: this.modalId + 'Label'
+                modalLabel: this.modalId + 'Label',
+                projectName: '',
+                errors: []
             }
         },
         methods: {
-            AddProjectBtnClicked: function() {
-                // call api
-                // emit project name to the parent.
+            addProjectBtnClicked: async function() {
+                this.errors = []
+                if (!this.projectName) {
+                    this.errors.push("프로젝트 이름을 입력하세요.")
+                }
+
+                let project = {}
+                project.projectName = this.projectName
+                project.todos = []
+
+                if (this.errors.length == 0) {
+                    this.projectName = ''
+                    this.$eventHub.$emit('add-project-modal-submitted', project);
+                    $(`#${this.modalId}`).modal('toggle')
+                }
             }
         }
     }

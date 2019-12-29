@@ -78,4 +78,13 @@ describe('date-util-test', function() {
         assert.equal(modifiedTodo.text, modifiedText)
         assert.equal(modifiedTodo.dueDate, "2019-12-31")
     })
+
+    it('addProject function', async function() {
+        let project = {
+            projectName: 'unit test project'
+        }
+        let response = await Api.addProject(project)
+        assert.equal(response.data.projectNo, 3)
+
+    })
 })
