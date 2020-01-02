@@ -30,7 +30,7 @@ export default {
     return {}
   },
   modifyTodo: async function(todoObj) {
-    let todo = this.getTodoByProjectNoAndTodoId(todoObj.id, todoObj.projectNo);
+    let todo = this.getTodoByProjectNoAndTodoId(todoObj.id, todoObj.previousProjectNo);
     todo.completed = todoObj.completed
     todo.text = todoObj.text
     todo.dueDate = todoObj.dueDate

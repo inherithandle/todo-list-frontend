@@ -42,11 +42,29 @@ export default {
     },
     getNowString: function() {
         let now = new Date()
+        return this.getDateString(now);
+    },
+    getDateString: function(date) {
         return [
-            now.getFullYear(),
-            (now.getMonth()+1).toString().padStart(2, '0'), // getMonth() is zero-based
-            now.getDate().toString().padStart(2, '0')
+            date.getFullYear(),
+            (date.getMonth()+1).toString().padStart(2, '0'), // getMonth() is zero-based
+            date.getDate().toString().padStart(2, '0')
         ].join('-');
+    },
+    getDateFromString: function(str) {
+        if (!/\d\d\d\d\-\d\d\-\d\d/.test(str)) {
+            throw Error('the 1st parameter is invalid.')
+        }
+
+        let year = parseInt(str.substring(0,4));
+        let month = parseInt(str.substring(5,7));
+        let day = parseInt(str.substring(8,10));
+
+        if(month >= 13 && day >= 32) {
+            throw Error('string format mm or dd is invalid.')
+        }
+
+        return new Date(year, month - 1, day);
     }
 
 }

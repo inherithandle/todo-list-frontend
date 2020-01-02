@@ -1,6 +1,7 @@
 <template>
     <div class="row">
         <Sidebar
+        ref="sidebar"
         v-on:summary-clicked="summaryClicked"
         v-on:project-clicked="projectClicked"
         v-bind:projects="projects"
@@ -13,18 +14,18 @@
                 <h3>{{ currentScreen.title }}</h3>
             </div>
 
-            <div class="mb-3 alert alert-danger" role="alert" v-if="errors.length">
+            <b-alert class="mb-3" v-model="showTodoFormError" variant="danger" dismissible>
                 <ul>
                     <li v-for="error in errors">
                         {{ error }}
                     </li>
                 </ul>
-            </div>
+            </b-alert>
 
             <div class="d-flex mb-3">
-                <div class="flex-grow-1 alert alert-primary" role="alert" v-if="currentScreen.isSummaryClicked">
+                <b-alert class="flex-grow-1" variant="info" show v-if="currentScreen.isSummaryClicked">
                     Sidebar에서 Project를 선택하면, 할 일을 추가할 수 있습니다.
-                </div>
+                </b-alert>
                 <div class="mr-2 flex-grow-1" v-if="!currentScreen.isSummaryClicked">
                     <input v-model="newTodo.text" type="text" class="form-control todo-list-input" placeholder="할 일을 입력하세요.">
                 </div>
@@ -97,12 +98,14 @@
                             {{ todo.dueDate }}
                         </div>
                         <div class="align-self-center">
-                            <!-- TODO: v-for 사용해서 dateUpdated에게 인덱스를 넘겨줘야한다. -->
                             <DatePicker
                                     v-on:update-date="dateUpdated($event, todo.id, todo.projectNo)"
                                     v-bind:picker-id="'todo-datepicker-' + index"
                                     input-type="icon"
                             ></DatePicker>
+                        </div>
+                        <div class="align-self-center">
+                            <button class="btn" @click="modifyTodoBtnClicked(todo)"><i class="fas fa-pencil-alt"></i></button>
                         </div>
                         <div class="align-self-center">
                             <button class="btn" @click="deleteTodoBtnClicked(todo.id, todo.projectNo)"><i class="fas fa-trash"></i></button>
@@ -161,6 +164,7 @@ export default {
                 projectNo: 0,
                 dueDate: DateUtil.getNowString()
             },
+            showTodoFormError: false,
             errors: [],
             projects: {},
             currentIndex: PROJECT_NOT_SELECTED
@@ -240,9 +244,11 @@ export default {
     },
     created: function() {
         this.$eventHub.$on('add-project-modal-submitted', this.addProject);
+        this.$eventHub.$on('modify-project-modal-submitted', this.modifyTodo);
     },
     beforeDestroy() {
         this.$eventHub.$off('add-project-modal-submitted');
+        this.$eventHub.$off('modify-project-modal-submitted');
     },
     mounted: async function() {
         let response = await this.api.isValidAccessToken()
@@ -306,6 +312,7 @@ export default {
             }
 
             if (this.errors.length == 0) {
+                this.showTodoFormError = false
                 let todo = {}
                 todo.projectNo = this.projects[this.currentIndex].projectNo
                 todo.text = this.newTodo.text
@@ -324,6 +331,8 @@ export default {
                 this.newTodo.completed = false
                 this.newTodo.projectNo = 0
                 this.newTodo.dueDate = DateUtil.getNowString()
+            } else {
+                this.showTodoFormError = true
             }
         },
         addProject: async function(project) {
@@ -331,6 +340,32 @@ export default {
             if (response.data.projectNo > 0) {
                 this.projects.push(response.data)
             }
+        },
+        modifyTodo: async function(todoToBe) {
+            let todo = this.getTodoByProjectNoAndTodoId(todoToBe.id, todoToBe.previousProjectNo)
+
+            if (this.isTodoChanged(todo, todoToBe)) {
+                if (todo.projectNo != todoToBe.projectNo) {
+                    let project = this.getProjectByProjectNo(todo.projectNo)
+                    let projectToBe = this.getProjectByProjectNo(todoToBe.projectNo)
+
+                    // delete todo from project
+                    let index = project.todos.findIndex(t => t.id == todo.id)
+                    project.todos.splice(index, 1)
+
+                    // push todo to projectToBe
+                    projectToBe.todos.push(todo)
+                    todo.projectNo = todoToBe.projectNo
+
+                    let projectIndex = this.projects.findIndex(p => p.projectNo == projectToBe.projectNo)
+                    this.$refs.sidebar.projectClicked(projectIndex, projectToBe.projectName)
+                }
+
+                todo.dueDate = todoToBe.dueDate
+                todo.text = todoToBe.text
+                await this.api.modifyTodo(todoToBe)
+            }
+
         },
         deleteTodoBtnClicked: async function(todoId, projectNo) {
             let todo = {}
@@ -341,6 +376,16 @@ export default {
             let project = this.getProjectByProjectNo(projectNo)
             let todoIndex = project.todos.findIndex(t => t.id == todoId)
             project.todos.splice(todoIndex, 1)
+        },
+        modifyTodoBtnClicked: function(todo) {
+            let todoToBeModified = {}
+            todoToBeModified.text = todo.text
+            todoToBeModified.id = todo.id
+            todoToBeModified.dueDate = todo.dueDate
+            todoToBeModified.projectNo = todo.projectNo
+            todoToBeModified.projects = this.projects
+            todoToBeModified.previousProjectNo = todo.projectNo
+            this.$emit('modify-todo-modal-show', todoToBeModified)
         },
         checkboxChanged: async function(todoId, projectNo) {
             let todo = this.getTodoByProjectNoAndTodoId(todoId, projectNo);
@@ -363,6 +408,18 @@ export default {
                 throw Error(`no such todo with todoId ${todoId}`)
             }
             return todo
+        },
+        isTodoChanged: function(todo, todoToBe) {
+            if (todo.dueDate != todoToBe.dueDate)
+                return true
+            else if (todo.text != todoToBe.text)
+                return true
+            else if (todo.projectNo != todoToBe.projectNo)
+                return true
+
+
+
+            return false
         }
     }
 }

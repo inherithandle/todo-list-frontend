@@ -1,12 +1,12 @@
 <template>
-    <input type="text" class="datepicker" style="display:none;" :id="pickerId">
+    <input type="text" class="datepicker" style="display:none;" :id="pickerId" readonly="readonly">
 </template>
 
 <script>
-
+import DateUtil from '../js/date-util.js'
 export default {
     name: "DatePicker",
-    props: ['picker-id', 'input-type'],
+    props: ['picker-id', 'input-type', 'initial-date', 'input-class'],
     mounted: function() {
         const buttonIconHtml = '<i class="fas fa-calendar-alt"></i>'
         const buttonTextHtml = '마감일 설정하기'
@@ -21,6 +21,10 @@ export default {
             }
         }
 
+        if (this.initialDate != null) {
+            option.minDate = DateUtil.getDateFromString(this.initialDate)
+        }
+
         let classStr
         if (this.inputType == 'icon') {
             option.showOn = 'button'
@@ -30,9 +34,18 @@ export default {
             option.showOn = 'button'
             option.buttonText = buttonTextHtml
             classStr = 'add btn btn-primary font-weight-bold'
+        } else if (this.inputType == 'text') {
+            console.log('input type : text.')
+            console.log(`picker ID : ${this.pickerId}`)
+            $("#" + this.pickerId).show().addClass(this.inputClass)
         }
 
+
         $("#" + this.pickerId).datepicker(option).next('.ui-datepicker-trigger').addClass(classStr)
+
+        if (this.initialDate != null) {
+            $("#" + this.pickerId).datepicker( "setDate", this.initialDate);
+        }
     }
 }
 </script>

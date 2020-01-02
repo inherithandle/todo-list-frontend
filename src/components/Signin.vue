@@ -3,9 +3,9 @@
         <main role="main" class="col-md-12 ml-sm-auto px-4 text-center">
             <form class="form-signin">
                 <h1 class="h3 mb-3 font-weight-normal">로그인</h1>
-                <div class="alert alert-info" role="alert" v-if="loginFailed">
+                <b-alert v-model="loginFailed" variant="info" dismissible style="word-break: keep-all;">
                     ID 혹은 비밀번호가 올바르지 않습니다.
-                </div>
+                </b-alert>
                 <label for="userId" class="sr-only">ID</label>
                 <input type="text" id="userId" class="form-control" placeholder="ID" v-model="userId" required="" autofocus="">
                 <label for="password" class="sr-only">Password</label>

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "run() { node node_modules/webpack/bin/webpack.js src/test/$1 -o test-dist/test-bundle.js --devtool=\"inline-source-map\" && mocha test-dist/test-bundle.js; }; run",
     "build": "NODE_ENV=development webpack --define process.env.NODE_ENV=\"'development'\"",
+    "build:local": "NODE_ENV=development webpack --define process.env.NODE_ENV=\"'local'\"",
     "watch": "NODE_ENV=development webpack --watch --define process.env.NODE_ENV=\"'development'\"",
     "watch:dev": "NODE_ENV=development webpack --watch --define process.env.NODE_ENV=\"'development'\"",
     "watch:local": "NODE_ENV=local webpack --watch --define process.env.NODE_ENV=\"'local'\"",
@@ -38,6 +39,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.1.0",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
     "js-cookie": "^2.2.1",

@@ -61,7 +61,7 @@
                 </li>
             </ul>
             <div>
-                <button class="add btn btn-primary font-weight-bold todo-list-add-btn ml-3" data-toggle="modal" data-target="#addProjectModal">프로젝트 추가</button>
+                <b-button class="ml-3" v-b-modal.add-project-modal>프로젝트 추가하기</b-button>
             </div>
         </div>
     </nav>

@@ -25,12 +25,33 @@ describe('date-util-test', function() {
     //     assert.equal(DateUtil.isInDays(input, 30), true)
     // })
 
+
+
     it('get YYYY-mm-dd string', function() {
-        let dateStr = DateUtil.getNowString()
-
-        // 테스트할 때마다 expected값을 변경해줘야..
-        assert.equal(DateUtil.getNowString(), '2019-12-25')
-
+        let date = new Date(2019, 0, 1)
+        assert.equal(DateUtil.getDateString(date), '2019-01-01')
     })
+
+    it('parseint leading zero test', function() {
+        assert.equal(parseInt('0123'), 123)
+    })
+    //getDateFromString
+
+    it('getDateFromString', function() {
+        let date = DateUtil.getDateFromString('2020-01-01')
+        assert.equal(date.getFullYear(), 2020)
+        assert.equal(date.getMonth(), 0)
+        assert.equal(date.getDate(), 1)
+    })
+
+    it('date format reexp test', function() {
+        assert.equal(/\d\d\d\d\-\d\d\-\d\d/.test('2019-01-01'), true)
+        assert.equal(/\d\d\d\d\-\d\d\-\d\d/.test('2019-12-31'), true)
+        assert.equal(/\d\d\d\d\-\d\d\-\d\d/.test('2019-12-35'), true)
+        assert.equal(/\d\d\d\d\-\d\d\-\d\d/.test('19-01-01'), false)
+        assert.equal(/\d\d\d\d\-\d\d\-\d\d/.test('2019-1-1'), false)
+    })
+
+
 
 })
