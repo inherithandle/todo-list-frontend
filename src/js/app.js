@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import App from '../components/App.vue'
 import Signin from '../components/Signin.vue'
+import Signup from '../components/Signup.vue'
 import TodoBody from "../components/TodoBody.vue";
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
@@ -23,7 +24,8 @@ Vue.use(Vuex) // Vuex requires Promise. If your supporting browsers do not imple
 
 const routes = [
   { path: '/signin', component: Signin },
-  { path: '/', component: TodoBody }
+  { path: '/', component: TodoBody },
+  { path: '/signup', component: Signup }
 ]
 
 const router = new VueRouter({

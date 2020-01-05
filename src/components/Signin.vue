@@ -31,8 +31,14 @@
                     </p>
                 </div>
                 <div class="my-3">
-                    <button class="btn btn-lg btn-primary btn-block" formnovalidate>구글로 로그인하기</button>
-                    <button class="btn btn-lg btn-primary btn-block" formnovalidate>회원가입</button>
+                    <button
+                        class="btn btn-lg btn-primary btn-block"
+                        @click=""
+                    >구글로 로그인하기</button>
+                    <button
+                        class="btn btn-lg btn-primary btn-block"
+                        @click="signupClicked()"
+                    >회원가입</button>
                 </div>
             </form>
         </main>
@@ -71,6 +77,9 @@
                 } else {
                     this.loginFailed = true
                 }
+            },
+            signupClicked: function() {
+                this.$router.push('/signup')
             }
         }
     }

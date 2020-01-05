@@ -30,7 +30,13 @@ export default {
     return {}
   },
   modifyTodo: async function(todoObj) {
-    let todo = this.getTodoByProjectNoAndTodoId(todoObj.id, todoObj.previousProjectNo);
+    let todo
+    if (todoObj.previousProjectNo === undefined) {
+      todo = this.getTodoByProjectNoAndTodoId(todoObj.id, todoObj.projectNo);
+    } else {
+      this.getTodoByProjectNoAndTodoId(todoObj.id, todoObj.previousProjectNo);
+    }
+
     todo.completed = todoObj.completed
     todo.text = todoObj.text
     todo.dueDate = todoObj.dueDate
@@ -87,7 +93,7 @@ export default {
     response.data = {}
     if (i >= 0 && this.user[i].password == password) {
       response.data.login = true;
-      response.data.accessToken = this.LOCAL_FAKE_ACCESS_TOKEN
+      response.data.accessToken = username
       response.data.userId = username
     } else {
       response.data.login = false;
@@ -95,18 +101,46 @@ export default {
 
     return response
   },
-  isValidAccessToken: async function(accessToken) {
+  isValidAccessToken: async function() {
     // return sessionStorage.getItem('accessToken') && accessToken === sessionStorage.getItem('accessToken')
     let response = {}
     response.data = {}
-    //
-    if (this.getCookie('access-token') == this.LOCAL_FAKE_ACCESS_TOKEN) {
+    let accessToken = this.getCookie('access-token')
+    let found = this.user.find(u => u.username == accessToken)
+
+    if (found) {
       response.data.login = true
       response.data.message = 'success'
-      response.data.userId = 'joma'
+      response.data.userId = found.username
     } else {
       response.data.login = false
     }
+    return response
+  },
+  isDuplicate: function (id) {
+    let response  = {}
+    response.data = {}
+
+    if (id == 'joma' || id == 'mayuko') {
+      response.data.isDuplicate = true
+    } else {
+      response.data.isDuplicate = false
+    }
+    return response
+  },
+  signup: function (user) {
+    let userRow = {
+      username: user.userId,
+      password: user.password
+    }
+    this.user.push(userRow)
+
+    let response = {}
+    response.data = {}
+
+    response.data.login = true;
+    response.data.accessToken = user.userId
+    response.data.userId = user.userId
     return response
   },
   getCookie: function (cname) {

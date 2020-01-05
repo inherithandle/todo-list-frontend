@@ -295,6 +295,7 @@ export default {
             try {
                 await this.api.modifyTodo(todo)
             } catch (error) {
+                console.log(error)
                 todo.dueDate = previousDate
             }
         },
