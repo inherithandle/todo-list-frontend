@@ -1,7 +1,6 @@
 export default {
     getAPI: async function() {
         let imported
-        console.log(process.env.NODE_ENV)
         if (process.env.NODE_ENV == 'production') {
             imported = await import(/* webpackMode: "eager" */ './api-production.js')
         } else if (process.env.NODE_ENV == 'development') {

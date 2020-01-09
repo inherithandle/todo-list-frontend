@@ -25,7 +25,18 @@ describe('date-util-test', function() {
     //     assert.equal(DateUtil.isInDays(input, 30), true)
     // })
 
+    it('is today test', function() {
+        let today = new Date()
+        let todayStr = DateUtil.getDateString(today)
+        assert.equal(DateUtil.isToday(todayStr), true)
+        assert.equal(DateUtil.isToday(todayStr), true)
+        assert.equal(DateUtil.isToday('2019-12-24'), true)
+        assert.equal(DateUtil.isToday('2020-02-06'), false)
+    })
 
+    it('within week', function() {
+        assert.equal(DateUtil.isInDays('2019-12-31', 7), false)
+    })
 
     it('get YYYY-mm-dd string', function() {
         let date = new Date(2019, 0, 1)

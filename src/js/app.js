@@ -6,6 +6,11 @@ import App from '../components/App.vue'
 import Signin from '../components/Signin.vue'
 import Signup from '../components/Signup.vue'
 import TodoBody from "../components/TodoBody.vue";
+import SearchResult from '../components/SearchResult.vue'
+import Summary from '../components/Summary.vue'
+import Project from '../components/Project.vue'
+import ApiLocal from './api-local'
+import ApiDev from './api-dev'
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/regular'
@@ -17,15 +22,60 @@ import '../scss/app.scss';
 import '../scss/dashboard.css'
 import 'webpack-jquery-ui';
 import 'webpack-jquery-ui/css';
+if (process.env.NODE_ENV == 'production') {
+  Vue.prototype.$api = ApiDev
+} else if (process.env.NODE_ENV == 'development') {
+  Vue.prototype.$api = ApiDev
+} else {
+  Vue.prototype.$api = ApiLocal
+}
 Vue.prototype.$eventHub = new Vue(); // Global event bus
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(Vuex) // Vuex requires Promise. If your supporting browsers do not implement Promise (e.g. IE), you can use a polyfill library, such as es6-promise.
 
 const routes = [
-  { path: '/signin', component: Signin },
-  { path: '/', component: TodoBody },
-  { path: '/signup', component: Signup }
+  {
+    path: '/',
+    name: 'body',
+    component: TodoBody,
+    children: [
+      {
+        path: 'search',
+        name: 'search',
+        component: SearchResult,
+        props: (route) => ({
+          query: route.query.query
+        })
+      },
+      {
+        path: '',
+        name: 'summary',
+        component: Summary,
+        props: (route) => ({
+          summaryIndex: route.query.summaryIndex
+        })
+      },
+      {
+        path: 'project',
+        name: 'project',
+        component: Project,
+        props: (route) => ({
+          projectIndex: route.query.projectIndex
+        })
+      }
+    ]
+  },
+  {
+    path: '/signin',
+    name: 'signin',
+    component: Signin
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: Signup
+  }
 ]
 
 const router = new VueRouter({

@@ -57,7 +57,6 @@
 <script>
     import Cookies from 'js-cookie'
     export default {
-        props: ['api'],
         name: "Signup",
         data: function() {
             return {
@@ -74,9 +73,6 @@
         computed: {
             hasErrors: function() {
                 return this.errors.length > 0
-            },
-            abcd: function() {
-                return this.noDuplicateMessage.length > 0
             }
         },
         methods: {
@@ -120,7 +116,7 @@
                     password: this.form.password
                 }
 
-                let response = await this.api.signup(user)
+                let response = await this.$api.signup(user)
 
                 if (response.data.login) {
                     Cookies.set('access-token', response.data.accessToken)
@@ -146,7 +142,7 @@
                     return ;
                 }
 
-                let response = this.api.isDuplicate(this.form.userId)
+                let response = this.$api.isDuplicate(this.form.userId)
 
                 if (response.data.isDuplicate) {
                     this.errors.push(`${this.form.userId}는 이미 사용중인 아이디입니다.`)

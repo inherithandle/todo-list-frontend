@@ -17,9 +17,14 @@ export default {
         return input.getTime() <= now.getTime()
     },
     isInDays(dateStr, day) {
+        let now = new Date()
+        now = this.deleteTime(now)
+
         let input = new Date(dateStr)
         let due = this.getDateAfter(day)
-        return input.getTime() <= due.getTime()
+        due = this.deleteTime(due)
+
+        return now.getTime() <= input.getTime() && input.getTime() <= due.getTime()
     },
     getDateAfter: function(days) {
         if (days <= 0) {

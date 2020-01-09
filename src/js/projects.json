@@ -7,7 +7,7 @@
       "text": "wash my car",
       "completed": false,
       "projectNo": 1,
-      "dueDate": "2019-12-24"
+      "dueDate": "2019-12-31"
     }, {
       "id": 3,
       "text": "completed things",
@@ -19,7 +19,7 @@
       "text": "get my hands dirty",
       "completed": false,
       "projectNo": 1,
-      "dueDate": "2019-12-23"
+      "dueDate": "2020-01-09"
     }, {
       "id": 4,
       "text": "Do it Later",

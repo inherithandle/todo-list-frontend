@@ -47,23 +47,18 @@
 
 <script>
     import Cookies from 'js-cookie'
-    import ApiFactory from '../js/api.js'
     export default {
         name: "Signin",
         data: function() {
             return {
-                api: null,
                 userId: "",
                 password: "",
                 loginFailed: false
             }
         },
-        mounted: async function() {
-            this.api = await ApiFactory.getAPI()
-        },
         methods: {
             signinClicked: async function() {
-                let response = await this.api.login(this.userId, this.password)
+                let response = await this.$api.login(this.userId, this.password)
                 if (response.data.login) {
                     Cookies.set('access-token', response.data.accessToken)
                     this.loginFailed = false

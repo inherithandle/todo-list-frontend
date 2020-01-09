@@ -12,4 +12,11 @@ describe('regular expression', function() {
         assert.equal(regExpForID.test('in'), false)
     })
 
+    it('string contains:', function() {
+        let string = "foo", substring = "oo", substring2 = "cba";
+
+        assert.equal(string.indexOf(substring) != -1, true); // found
+        assert.equal(string.indexOf(substring2) == -1, true); // not found
+    })
+
 })

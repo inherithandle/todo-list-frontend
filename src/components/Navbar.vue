@@ -2,7 +2,7 @@
   <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Todo App</a>
       <form class="form-inline col-md-6 my-auto" v-if="user.login">
-          <input class="form-control form-control-dark w-75 mr-2" type="text" placeholder="Search" aria-label="Search">
+          <input v-model="query" class="form-control form-control-dark w-75 mr-2" type="text" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-sm-0" type="submit" @click="searchButtonClicked">Search</button>
       </form>
       <ul class="navbar-nav px-3" style="flex-direction: row;" v-if="user.login">
@@ -10,7 +10,7 @@
                 <a class="nav-link" href="#">{{ user.userId }}님</a>
             </li>
             <li class="nav-item text-nowrap px-3" @click="signoutClicked">
-                <router-link to="/signin" class="nav-link">Sign out</router-link>
+                <a class="nav-link" href="#">Sign out</a>
             </li>
       </ul>
     </nav>
@@ -21,17 +21,30 @@ import { mapState } from 'vuex'
 import Cookies from 'js-cookie'
 export default {
     computed: mapState(['user']),
+    data: function() {
+        return {
+            query: ''
+        }
+    },
     methods: {
         searchButtonClicked(e) {
-            alert('search btn clicked')
-        },
+            this.$router.push({
+                name: 'search',
+                query: {
+                    query: this.query
+                }
+            })
 
+        },
         signoutClicked() {
             Cookies.remove('access-token')
             this.$store.commit({
                 type: 'login',
                 userId: '',
                 login: false
+            })
+            this.$router.push({
+                name: 'signin'
             })
         }
     }

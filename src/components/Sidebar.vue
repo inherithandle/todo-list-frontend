@@ -81,9 +81,21 @@ export default {
     },
     methods: {
         summaryClicked: function(index, labelForSummary) {
+            // this statement prevent duplicate navigation
+            if (this.summary.active == index) {
+                return ;
+            }
+
             this.activeProject = NOT_SELECTED
             this.summary.active = index
-            this.$emit('summary-clicked', labelForSummary, index)
+            // this.$emit('summary-clicked', labelForSummary, index)
+            this.$router.push({
+                name: 'summary',
+                query: {
+                    summaryIndex: index
+                }
+            })
+
         },
         projectClicked: function(index, projectName) {
             this.summary.active = NOT_SELECTED
