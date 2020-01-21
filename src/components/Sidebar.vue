@@ -56,7 +56,7 @@
                         {{ project.todos.filter(t => !t.completed).length }}
                     </div>
                     <div class="align-self-center">
-                        <button class="btn" @click.stop="projectDeleted"><i class="fas fa-trash"></i></button>
+                        <button class="btn" @click.stop="projectDeleted(project.projectNo)"><i class="fas fa-trash"></i></button>
                     </div>
                 </li>
             </ul>
@@ -102,8 +102,9 @@ export default {
             this.activeProject = index
             this.$emit('project-clicked', projectName, index)
         },
-        projectDeleted: function() {
-            alert('trash can!')
+        projectDeleted: function(projectNo) {
+            this.$emit(`project-deleted`, projectNo)
+
         }
     }
 }

@@ -19,7 +19,7 @@
             </div>
 
             <div class="my-2 px-2" v-if="newTodo.dueDate.length">
-                {{ newTodo.dueDate }}까지
+                {{ newTodo.dueDate.substring(0, 10) }}까지
             </div>
 
             <div class="mr-2">
@@ -53,7 +53,7 @@
                         {{ todo.text }}
                     </div>
                     <div class="align-self-center">
-                        {{ todo.dueDate }}
+                        {{ todo.dueDate.substring(0, 10) }}
                     </div>
                     <div class="align-self-center">
                         <DatePicker
@@ -88,10 +88,10 @@
                         <del>{{ todo.text}}</del>
                     </div>
                     <div class="align-self-center">
-                        {{ todo.dueDate }}
+                        {{ todo.dueDate.substring(0, 10) }}
                     </div>
                     <div class="align-self-center">
-                        <button class="btn"><i class="fas fa-trash"></i></button>
+                        <button @click="deleteTodoBtnClicked(todo.id, todo.projectNo)" class="btn"><i class="fas fa-trash"></i></button>
                     </div>
                 </li>
             </ul>
@@ -114,7 +114,7 @@
                     text: '',
                     completed: false,
                     projectNo: 0,
-                    dueDate: DateUtil.getNowString()
+                    dueDate: DateUtil.getNowTimeStampString()
                 },
                 showTodoFormError: false,
                 errors: []
@@ -150,12 +150,6 @@
                     todo.text = this.newTodo.text
                     todo.completed = false
                     todo.dueDate = this.newTodo.dueDate
-
-                    let response = await this.$api.addTodo(todo)
-                    console.log(`todo length. ${this.projects[this.projectIndex].todos.length}`)
-
-                    todo.id = response.data.id
-
                     this.$emit('new-todo-added', todo)
                     this.clearNewTodoObject()
                 } else {
@@ -173,24 +167,23 @@
                 this.$emit('modify-todo-modal-show', todoToBeModified)
             },
             deleteTodoBtnClicked: async function(todoId, projectNo) {
-                let todo = {}
-                todo.id = todoId
-                todo.projectNo = projectNo
-                await this.$api.deleteTodo(todo)
-                this.$emit('todo-deleted', todo.id, todo.projectNo)
+                this.$emit('todo-deleted', todoId, projectNo)
             },
             dateUpdated: function(date, todoId, projectNo) {
                 this.$emit('todo-due-date-modified', date, todoId, projectNo)
             },
-            checkboxChanged: async function(todoId, projectNo) {
+            checkboxChanged: function(todoId, projectNo) {
                 this.$emit('checkbox-changed', todoId, projectNo)
+            },
+            trashCanClicked: function(todoId, projectNo) {
+                this.$emit('trash-can-clicked', todoId, projectNo)
             },
             clearNewTodoObject: function() {
                 this.newTodo.id = 0
                 this.newTodo.text = ''
                 this.newTodo.completed = false
                 this.newTodo.projectNo = 0
-                this.newTodo.dueDate = DateUtil.getNowString()
+                this.newTodo.dueDate = DateUtil.getNowTimeStampString()
             }
         }
     }

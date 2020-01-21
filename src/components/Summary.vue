@@ -24,7 +24,7 @@
                             {{ todo.text }}
                         </div>
                         <div class="align-self-center">
-                            {{ todo.dueDate }}
+                            {{ todo.dueDate.substring(0, 10) }}
                         </div>
                         <div class="align-self-center">
                             <DatePicker

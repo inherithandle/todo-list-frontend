@@ -77,7 +77,7 @@ export default {
     response.data.projectNo = this.numOfProjects
     return response
   },
-  deleteProject: async function(projectObj) {
+  deleteProject: async function(projectNo) {
     return {}
   },
   modifyProject: async function(projectObj) {

@@ -80,12 +80,15 @@ module.exports = {
   ]
 }
 
+const PRODUCTION_URL = 'https://gtchoi.todolist.com'
+const DEV_URL = 'http://localhost:8181'
+
 if (process.env.NODE_ENV == 'production') {
   module.exports.plugins.push(new webpack.DefinePlugin({
-    API_URL: JSON.stringify('https://gtchoi.todolist.com')
+    API_URL: JSON.stringify(PRODUCTION_URL)
   }))
 } else if (process.env.NODE_ENV == 'development') {
   module.exports.plugins.push(new webpack.DefinePlugin({
-    API_URL: JSON.stringify('http://localhost:8181')
+    API_URL: JSON.stringify(DEV_URL)
   }))
 }

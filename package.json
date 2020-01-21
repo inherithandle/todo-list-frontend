@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "run() { node node_modules/webpack/bin/webpack.js src/test/$1 -o test-dist/test-bundle.js --devtool=\"inline-source-map\" && mocha test-dist/test-bundle.js; }; run",
+    "test": "run() { node node_modules/webpack/bin/webpack.js src/test/$1 -o test-dist/test-bundle.js --config webpack.unit-test.config.js && mocha test-dist/test-bundle.js; }; run",
     "build": "NODE_ENV=development webpack --define process.env.NODE_ENV=\"'development'\"",
     "build:local": "NODE_ENV=development webpack --define process.env.NODE_ENV=\"'local'\"",
     "watch": "NODE_ENV=development webpack --watch --define process.env.NODE_ENV=\"'development'\"",

@@ -17,7 +17,7 @@ export default {
             dateFormat: "yy-mm-dd",
             minDate: 0,
             onSelect: function (d) {
-                self.$emit('update-date', d)
+                self.$emit('update-date', d + 'T23:59:59.99')
             }
         }
 

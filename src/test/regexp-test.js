@@ -19,4 +19,10 @@ describe('regular expression', function() {
         assert.equal(string.indexOf(substring2) == -1, true); // not found
     })
 
+    it('test against empty array', function() {
+        let emptyArray = []
+        console.log(emptyArray)
+        // 정상 동작.
+    })
+
 })

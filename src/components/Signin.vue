@@ -6,16 +6,25 @@
                 <b-alert v-model="loginFailed" variant="info" dismissible style="word-break: keep-all;">
                     ID 혹은 비밀번호가 올바르지 않습니다.
                 </b-alert>
+
+                <b-alert class="mb-3" v-model="showSigninFormError" variant="danger" dismissible>
+                    <ul>
+                        <li v-for="error in errors">
+                            {{ error }}
+                        </li>
+                    </ul>
+                </b-alert>
+
                 <label for="userId" class="sr-only">ID</label>
-                <input type="text" id="userId" class="form-control" placeholder="ID" v-model="userId" required="" autofocus="">
+                <input type="text" id="userId" class="form-control" placeholder="ID" v-model="userId" autofocus="">
                 <label for="password" class="sr-only">Password</label>
-                <input type="password" id="password" class="form-control" placeholder="Password" v-model="password" required="">
+                <input type="password" id="password" class="form-control" placeholder="Password" v-model="password">
                 <div class="checkbox mb-3">
                     <label>
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" @click="signinClicked" formnovalidate>로그인</button>
+                <button class="btn btn-lg btn-primary btn-block" @click="signinClicked">로그인</button>
                 <div v-if="false">
                     <p>
                         for your information...
@@ -33,7 +42,7 @@
                 <div class="my-3">
                     <button
                         class="btn btn-lg btn-primary btn-block"
-                        @click=""
+                        @click="signinWithGoogleClicked"
                     >구글로 로그인하기</button>
                     <button
                         class="btn btn-lg btn-primary btn-block"
@@ -53,11 +62,29 @@
             return {
                 userId: "",
                 password: "",
-                loginFailed: false
+                loginFailed: false,
+                showSigninFormError: false,
+                errors: []
             }
         },
         methods: {
             signinClicked: async function() {
+                this.errors = []
+                this.showSigninFormError = false
+
+                if (!this.userId) {
+                    this.errors.push('ID를 입력하세요.')
+                    this.showSigninFormError = true
+                }
+                if (!this.password) {
+                    this.errors.push('비밀번호를 입력하세요.')
+                    this.showSigninFormError = true
+                }
+
+                if (this.errors.length > 0) {
+                    return ;
+                }
+
                 let response = await this.$api.login(this.userId, this.password)
                 if (response.data.login) {
                     Cookies.set('access-token', response.data.accessToken)
@@ -75,6 +102,9 @@
             },
             signupClicked: function() {
                 this.$router.push('/signup')
+            },
+            signinWithGoogleClicked: function() {
+                //
             }
         }
     }

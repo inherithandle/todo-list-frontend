@@ -14,6 +14,8 @@ export default {
         let input = new Date(dateStr)
         let now = new Date()
         now = this.deleteTime(now)
+        input = this.deleteTime(input)
+
         return input.getTime() <= now.getTime()
     },
     isInDays(dateStr, day) {
@@ -48,6 +50,9 @@ export default {
     getNowString: function() {
         let now = new Date()
         return this.getDateString(now);
+    },
+    getNowTimeStampString: function() {
+        return this.getNowString() + 'T23:59:59.99'
     },
     getDateString: function(date) {
         return [

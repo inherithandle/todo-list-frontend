@@ -4,6 +4,7 @@
         ref="sidebar"
         v-on:summary-clicked="summaryClicked"
         v-on:project-clicked="projectClicked"
+        v-on:project-deleted="projectDeleted"
         v-bind:projects="projects"
         v-bind:num-of-today-summary="todaySummary.numOfTodos"
         v-bind:num-of-week-summary="weekSummary.numOfTodos"
@@ -27,6 +28,7 @@
 import Sidebar from './Sidebar.vue'
 import DatePicker from './DatePicker.vue'
 import DateUtil from '../js/date-util.js'
+import Cookies from 'js-cookie'
 
 const PROJECT_NOT_SELECTED = -1
 export default {
@@ -56,6 +58,10 @@ export default {
             summary.projects = []
             summary.numOfTodos = 0
 
+            if (typeof this.projects[0] == 'undefined') {
+                return summary
+            }
+
             for (let i = 0; i < this.projects.length; i++) {
                 let project = {}
                 project.projectName = this.projects[i].projectName
@@ -67,7 +73,6 @@ export default {
                 }
             }
             return summary
-
         },
         weekSummary: function() {
             let summary = {}
@@ -113,19 +118,18 @@ export default {
         this.$eventHub.$off('add-project-modal-submitted');
         this.$eventHub.$off('modify-project-modal-submitted');
     },
-    mounted: async function() {
-        let response = await this.$api.isValidAccessToken()
+    beforeCreate: async function() {
+        let accessToken = Cookies.get('access-token')
+        let response = await this.$api.isValidAccessToken(accessToken)
         if (response.data.login) {
             this.$store.commit({
                 type: 'login',
                 userId: response.data.userId,
                 login: response.data.login
             })
-
-            // get projects
-            this.projects = await this.$api.getProjects().data
-            console.log('projects response')
-            console.log(this.projects)
+            let projectResponse = await this.$api.getProjects()
+            this.projects = projectResponse.data
+            console.dir(this.projects)
         } else {
             this.$router.push('/signin')
         }
@@ -157,20 +161,25 @@ export default {
             let previousDate = todo.dueDate
             todo.dueDate = date
             try {
+                console.log(`due date : ${todo.dueDate}`)
                 await this.$api.modifyTodo(todo)
             } catch (error) {
                 console.log(error)
                 todo.dueDate = previousDate // rollback to the previous date.
             }
         },
-        newTodoAdded: function(todo) {
+        newTodoAdded: async function(todo) {
+            let response = await this.$api.addTodo(todo)
+            todo.id = response.data.id
+
             let project = this.getProjectByProjectNo(todo.projectNo)
             project.todos.push(todo)
         },
         addProject: async function(project) {
             let response = await this.$api.addProject(project)
             if (response.data.projectNo > 0) {
-                this.projects.push(response.data)
+                project.projectNo = response.data.projectNo
+                this.projects.push(project)
             }
         },
         modifyTodo: async function(todoToBe) {
@@ -200,6 +209,11 @@ export default {
 
         },
         todoDeleted: async function(todoId, projectNo) {
+            let todo = {}
+            todo.id = todoId
+            todo.projectNo = projectNo
+            await this.$api.deleteTodo(todo)
+
             let project = this.getProjectByProjectNo(projectNo)
             let todoIndex = project.todos.findIndex(t => t.id == todoId)
             project.todos.splice(todoIndex, 1)
@@ -237,6 +251,13 @@ export default {
             else if (todo.projectNo != todoToBe.projectNo)
                 return true
             return false
+        },
+        projectDeleted: async function(projectNo) {
+            if (window.confirm("Are you sure to delete this project?")) {
+                await this.$api.deleteProject(projectNo)
+                let projectIndex = this.projects.findIndex(p => p.projectNo == projectNo)
+                this.projects.splice(projectIndex, 1)
+            }
         }
     }
 }

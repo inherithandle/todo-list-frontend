@@ -33,7 +33,7 @@
                             {{ todo.text }}
                         </div>
                         <div class="align-self-center">
-                            {{ todo.dueDate }}
+                            {{ todo.dueDate.substring(0, 10) }}
                         </div>
                         <div class="align-self-center">
                             <DatePicker
@@ -76,10 +76,13 @@
                 return searchResult
             }
         },
-        methods: {
-
-        },
-        mounted: function() {
+        methods:  {
+            deleteTodoBtnClicked: function(todoId, projectNo) {
+                this.$emit('todo-deleted', todoId, projectNo)
+            },
+            checkboxChanged: function(todoId, projectNo) {
+                this.$emit('checkbox-changed', todoId, projectNo)
+            },
         },
         components: {
             DatePicker
