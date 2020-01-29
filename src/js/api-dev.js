@@ -168,12 +168,12 @@ export default {
     })
   },
   isValidAccessToken: async function(accessToken) {
-    let notAuthrizedResponse = {}
-    notAuthrizedResponse.data = {}
-    notAuthrizedResponse.data.login = false
+    let notAuthorizedResponse = {}
+    notAuthorizedResponse.data = {}
+    notAuthorizedResponse.data.login = false
 
     if (accessToken === undefined) {
-      return notAuthrizedResponse
+      return notAuthorizedResponse
     }
     return axios.get(API_URL + '/token', this.POST_CONFIG).catch(error => {
       if (error.response.status == 401) {
@@ -183,5 +183,42 @@ export default {
         throw error
       }
     })
-  }
+  },
+  signinWithGoogle: async function(authCode) {
+    const tokenType = 'GOOGLE'
+    const API_NAME = '/login-with-third-party'
+
+    if (!authCode) {
+      let notAuthorizedResponse = {}
+      notAuthorizedResponse.data = {}
+      notAuthorizedResponse.data.login = false
+      return notAuthorizedResponse
+    } else {
+      let body = {}
+      body.authorizationCode = authCode
+      body.tokenType = tokenType
+
+      return axios.post(API_URL + API_NAME, body, this.POST_CONFIG).catch(error => {
+        if (error.response.status == 401) {
+          error.response.data.login = false
+          return error.response
+        } else {
+          throw error
+        }
+      })
+    }
+  },
+  isDuplicate: async function (userId) {
+    const API_NAME = '/duplicate'
+
+    return axios.get(API_URL + API_NAME, {
+      params: {
+        userId: userId
+      }
+    }, this.POST_CONFIG)
+  },
+  signup: function (user) {
+    const API_NAME = '/signup'
+    return axios.post(API_URL + API_NAME, user, this.POST_CONFIG)
+  },
 }

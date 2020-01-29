@@ -46,15 +46,16 @@ const routes = [
         component: SearchResult,
         props: (route) => ({
           query: route.query.query
-        })
+        }),
       },
       {
         path: '',
         name: 'summary',
         component: Summary,
         props: (route) => ({
-          summaryIndex: route.query.summaryIndex
-        })
+          summaryIndex: route.query.summaryIndex,
+          code: route.query.code
+        }),
       },
       {
         path: 'project',
@@ -62,19 +63,29 @@ const routes = [
         component: Project,
         props: (route) => ({
           projectIndex: route.query.projectIndex
-        })
+        }),
       }
     ]
   },
   {
     path: '/signin',
     name: 'signin',
-    component: Signin
+    component: Signin,
   },
   {
     path: '/signup',
     name: 'signup',
-    component: Signup
+    component: Signup,
+  },
+  {
+    path: '/redirect-to-google',
+    redirect: to => {
+      let queryString = Object.keys(to.query).map(function(key) {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(to.query[key])
+      }).join('&');
+      window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${queryString}`
+      return ''
+    }
   }
 ]
 

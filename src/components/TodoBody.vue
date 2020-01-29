@@ -13,7 +13,6 @@
         <main role="main" class="col-md-10 ml-sm-auto px-4">
             <router-view
             v-bind:projects="projects"
-            v-if="projects.length > 0"
             v-on:new-todo-added="newTodoAdded"
             v-on:modify-todo-modal-show="modifyTodoBtnClicked"
             v-on:todo-deleted="todoDeleted"
@@ -28,6 +27,7 @@
 import Sidebar from './Sidebar.vue'
 import DatePicker from './DatePicker.vue'
 import DateUtil from '../js/date-util.js'
+import UrlUtil from '../js/url-util.js'
 import Cookies from 'js-cookie'
 
 const PROJECT_NOT_SELECTED = -1
@@ -110,16 +110,14 @@ export default {
         }
 
     },
-    created: function() {
-        this.$eventHub.$on('add-project-modal-submitted', this.addProject);
-        this.$eventHub.$on('modify-project-modal-submitted', this.modifyTodo);
-    },
-    beforeDestroy() {
-        this.$eventHub.$off('add-project-modal-submitted');
-        this.$eventHub.$off('modify-project-modal-submitted');
-    },
-    beforeCreate: async function() {
+    created: async function() {
+        let googleCode = UrlUtil.getParameterByName('code')
+        if (googleCode != null) {
+            await this.processGoogleAuthorizationCode(googleCode)
+        }
+
         let accessToken = Cookies.get('access-token')
+        console.log(`access-token: ${accessToken}`)
         let response = await this.$api.isValidAccessToken(accessToken)
         if (response.data.login) {
             this.$store.commit({
@@ -131,9 +129,21 @@ export default {
             this.projects = projectResponse.data
             console.dir(this.projects)
         } else {
+            console.log('not signed in.')
             this.$router.push('/signin')
         }
 
+        this.$eventHub.$on('add-project-modal-submitted', this.addProject);
+        this.$eventHub.$on('modify-project-modal-submitted', this.modifyTodo);
+    },
+    beforeDestroy() {
+        this.$eventHub.$off('add-project-modal-submitted');
+        this.$eventHub.$off('modify-project-modal-submitted');
+    },
+    beforeCreate: async function() {
+
+    },
+    mounted: function() {
     },
     components: {
         DatePicker,
@@ -257,6 +267,12 @@ export default {
                 await this.$api.deleteProject(projectNo)
                 let projectIndex = this.projects.findIndex(p => p.projectNo == projectNo)
                 this.projects.splice(projectIndex, 1)
+            }
+        },
+        processGoogleAuthorizationCode: async function(code) {
+            let response = await this.$api.signinWithGoogle(code)
+            if (response.data.login) {
+                Cookies.set('access-token', response.data.accessToken)
             }
         }
     }

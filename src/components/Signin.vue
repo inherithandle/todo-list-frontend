@@ -40,10 +40,9 @@
                     </p>
                 </div>
                 <div class="my-3">
-                    <button
+                    <SigninWithGoogleButton
                         class="btn btn-lg btn-primary btn-block"
-                        @click="signinWithGoogleClicked"
-                    >구글로 로그인하기</button>
+                    >구글로 로그인하기</SigninWithGoogleButton>
                     <button
                         class="btn btn-lg btn-primary btn-block"
                         @click="signupClicked()"
@@ -56,8 +55,10 @@
 
 <script>
     import Cookies from 'js-cookie'
+    import SigninWithGoogleButton from "./SigninWithGoogleButton.vue";
     export default {
         name: "Signin",
+        components: {SigninWithGoogleButton},
         data: function() {
             return {
                 userId: "",
@@ -66,6 +67,12 @@
                 showSigninFormError: false,
                 errors: []
             }
+        },
+        beforeCreate: function() {
+            console.log('signin vue before create')
+        },
+        mounted: function() {
+            console.log('signin vue mounted')
         },
         methods: {
             signinClicked: async function() {

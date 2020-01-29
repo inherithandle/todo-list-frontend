@@ -113,7 +113,8 @@
 
                 let user = {
                     userId: this.form.userId,
-                    password: this.form.password
+                    password: this.form.password,
+                    confirmPassword: this.form.confirmPassword
                 }
 
                 let response = await this.$api.signup(user)
@@ -125,13 +126,11 @@
                         userId: this.userId,
                         login: response.data.login
                     })
-
-                    alert('회원가입이 완료되었습니다.')
                     this.$router.push('/')
                 }
 
             },
-            checkForDuplicate: function() {
+            checkForDuplicate: async function() {
                 this.errors = []
                 if (this.invalidUserId(this.form.userId)) {
                     this.errors.push("ID는 8자 이상 15이하, 한글 불가, 첫 글자는 반드시 영문자로 시작해주세요.")
@@ -142,9 +141,8 @@
                     return ;
                 }
 
-                let response = this.$api.isDuplicate(this.form.userId)
-
-                if (response.data.isDuplicate) {
+                let response = await this.$api.isDuplicate(this.form.userId)
+                if (response.data.duplicate) {
                     this.errors.push(`${this.form.userId}는 이미 사용중인 아이디입니다.`)
                 } else {
                     this.uniqueId = this.form.userId

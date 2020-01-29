@@ -117,14 +117,17 @@ export default {
     }
     return response
   },
+  signinWithGoogle: async function(token) {
+    return this.login(this.user[0].username, this.user[0].password)
+  },
   isDuplicate: function (id) {
     let response  = {}
     response.data = {}
 
     if (id == 'joma' || id == 'mayuko') {
-      response.data.isDuplicate = true
+      response.data.duplicate = true
     } else {
-      response.data.isDuplicate = false
+      response.data.duplicate = false
     }
     return response
   },

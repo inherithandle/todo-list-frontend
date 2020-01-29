@@ -1,4 +1,3 @@
-
 import assert from 'assert'
 
 describe('regular expression', function() {
@@ -23,6 +22,13 @@ describe('regular expression', function() {
         let emptyArray = []
         console.log(emptyArray)
         // 정상 동작.
+    })
+
+    it('test against empty array', function() {
+        let undefinedValue
+        let nullValue = null
+        assert.equal(!undefinedValue, true)
+        assert.equal(!nullValue, true)
     })
 
 })
