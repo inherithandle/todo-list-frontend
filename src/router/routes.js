@@ -1,11 +1,11 @@
-import Signin from '../components/Signin.vue'
-import Signup from '../components/Signup.vue'
-import TodoBody from "../components/TodoBody.vue";
-import SearchResult from '../components/SearchResult.vue'
-import Summary from '../components/Summary.vue'
-import Project from '../components/Project.vue'
-import GoogleSigninCallback from "../components/GoogleSigninCallback.vue";
-import Response404 from '../components/Response404.vue'
+import Signin from '../views/TheSignin.vue'
+import Signup from '../views/TheSignup.vue'
+import TodoBody from "../views/TheTodoBody.vue";
+import SearchResult from '../components/VTodoBodySearchResult.vue'
+import Summary from '../components/VTodoBodySummary.vue'
+import Project from '../components/VTodoBodyProject.vue'
+import GoogleSigninCallback from "../views/TheGoogleSigninCallback.vue";
+import Response404 from '../views/TheResponse404.vue'
 
 const routes = [
     {

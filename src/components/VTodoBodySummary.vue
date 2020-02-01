@@ -1,3 +1,4 @@
+// TodoBody.vue router candidate
 <template>
     <div>
         <div class="pt-3 pb-2 mb-3 border-bottom">
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-    import DatePicker from './DatePicker.vue'
+    import DatePicker from './VDatePicker.vue'
     import DateUtil from '../js/date-util.js'
 
     export default {

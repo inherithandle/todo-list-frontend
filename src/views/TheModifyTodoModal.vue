@@ -43,7 +43,7 @@
 </template>
 
 <script>
-    import DatePicker from './DatePicker.vue'
+    import DatePicker from '../components/VDatePicker.vue'
     export default {
         name: "ModifyTodoModal",
         props: ['modal-id', 'todo', 'project-no'],

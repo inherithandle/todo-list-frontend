@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar.vue'
-import DatePicker from './DatePicker.vue'
+import Sidebar from './TheSidebar.vue'
+import DatePicker from '../components/VDatePicker.vue'
 import DateUtil from '../js/date-util.js'
 import Cookies from 'js-cookie'
 

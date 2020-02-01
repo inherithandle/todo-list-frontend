@@ -55,7 +55,7 @@
 
 <script>
     import Cookies from 'js-cookie'
-    import SigninWithGoogleButton from "./SigninWithGoogleButton.vue";
+    import SigninWithGoogleButton from "../components/VSigninWithGoogleButton.vue";
     export default {
         name: "Signin",
         components: {SigninWithGoogleButton},

@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import Navigationbar from './Navbar.vue'
-import TodoBody from './TodoBody.vue'
-import AddProjectModal from './AddProjectModal.vue'
-import ModifyTodoModal from "./ModifyTodoModal.vue";
+import Navigationbar from '../views/TheNavbar.vue'
+import TodoBody from '../views/TheTodoBody.vue'
+import AddProjectModal from '../views/TheAddProjectModal.vue'
+import ModifyTodoModal from "../views/TheModifyTodoModal.vue";
 
 export default {
   data: function() {
