@@ -26,7 +26,7 @@
 <script>
 import Sidebar from './TheSidebar.vue'
 import DatePicker from '../components/VDatePicker.vue'
-import DateUtil from '../js/date-util.js'
+import DateUtil from '../utils/date-util.js'
 import Cookies from 'js-cookie'
 
 const PROJECT_NOT_SELECTED = -1

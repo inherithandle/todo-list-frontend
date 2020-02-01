@@ -1,5 +1,5 @@
 import assert from 'assert'
-import Api from "../js/api-dev";
+import Api from "../api/api-dev";
 
 let POST_CONFIG = {
     headers: {

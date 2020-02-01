@@ -1,4 +1,4 @@
-import Api from '../js/api-local'
+import Api from '../api/api-local'
 import assert from 'assert'
 
 describe('date-util-test', function() {

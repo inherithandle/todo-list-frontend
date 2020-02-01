@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import DateUtil from '../js/date-util.js'
+import DateUtil from '../utils/date-util.js'
 export default {
     name: "DatePicker",
     props: ['picker-id', 'input-type', 'initial-date', 'input-class'],

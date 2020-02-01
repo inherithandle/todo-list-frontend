@@ -1,4 +1,4 @@
-import DateUtil from '../js/date-util.js'
+import DateUtil from '../utils/date-util.js'
 import assert from 'assert'
 
 describe('date-util-test', function() {

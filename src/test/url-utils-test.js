@@ -1,5 +1,5 @@
 import assert from 'assert'
-import UrlUtil from '../js/url-util.js'
+import UrlUtil from '../utils/url-util.js'
 
 
 const EXPECTED_CODE = `4/vwGVVXCJh4xlNmqerbSV0LEc4EL_XofgyeUzp23rj5YTSihL4NNQOE2l4reB27KgNcMk2wuGhZbCEVWJSz7o6Zc`

@@ -46,7 +46,7 @@
 
 <script>
     import DatePicker from './VDatePicker.vue'
-    import DateUtil from '../js/date-util.js'
+    import DateUtil from '../utils/date-util.js'
 
     export default {
         name: "Summary",
