@@ -8,7 +8,7 @@ const webpack = require('webpack')
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: './src/js/app.js',
+  entry: './src/app.js',
   output: {
     filename: 'js/[name].js',
     path: path.resolve(__dirname, 'dist')

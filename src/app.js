@@ -1,19 +1,19 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
-import Router from '../router/index'
-import Store from '../store/index'
-import App from '../components/App.vue'
-import ApiLocal from '../api/api-local'
-import ApiDev from '../api/api-dev'
+import Router from './router'
+import Store from './store'
+import App from './App.vue'
+import ApiLocal from './api/api-local'
+import ApiDev from './api/api-dev'
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 import '@fortawesome/fontawesome-free/js/regular'
 import '@fortawesome/fontawesome-free/js/brands'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '../scss/todo-body.css'
-import '../scss/app.scss';
-import '../scss/dashboard.css'
+import './scss/todo-body.css'
+import './scss/app.scss';
+import './scss/dashboard.css'
 import 'webpack-jquery-ui';
 import 'webpack-jquery-ui/css';
 if (process.env.NODE_ENV == 'production') {
