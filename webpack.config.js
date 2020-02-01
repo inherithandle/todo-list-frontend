@@ -15,7 +15,10 @@ module.exports = {
   },
   devServer: {
     contentBase: './dist',
-    openPage: 'html/index.html'
+    index: '/html/index.html',
+    historyApiFallback: {
+      index: '/html/index.html'
+    }
   },
   module: {
     rules: [

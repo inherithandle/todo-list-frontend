@@ -24,7 +24,7 @@
                         <input type="checkbox" value="remember-me"> Remember me
                     </label>
                 </div>
-                <button class="btn btn-lg btn-primary btn-block" @click="signinClicked">로그인</button>
+                <button class="btn btn-lg btn-primary btn-block" @click.prevent="signinClicked">로그인</button>
                 <div v-if="false">
                     <p>
                         for your information...
@@ -75,6 +75,9 @@
             console.log('signin vue mounted')
         },
         methods: {
+            btn: function(e) {
+                alert('btn clicked.')
+            },
             signinClicked: async function() {
                 this.errors = []
                 this.showSigninFormError = false
@@ -103,6 +106,7 @@
                         login: response.data.login
                     })
                     this.$router.push('/')
+                    console.log('hello world')
                 } else {
                     this.loginFailed = true
                 }

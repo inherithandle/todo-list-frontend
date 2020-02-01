@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="pt-3 pb-2 mb-3 border-bottom">
-            <h3>{{ query }} 검색결과</h3>
+            <h3>{{ $route.query.query }} 검색결과</h3>
 
         </div>
 
@@ -56,10 +56,11 @@
     import DatePicker from './DatePicker.vue'
     export default {
         name: "SearchResult",
-        props: ['query', 'projects'],
+        props: ['projects'],
         computed: {
             searchResult: function() {
-                let criterion = todo => todo.text.toLowerCase().indexOf(this.query.toLowerCase()) != -1
+                let query = this.$route.query.query
+                let criterion = todo => todo.text.toLowerCase().indexOf(query.toLowerCase()) != -1
                 let searchResult = {}
                 searchResult.projects = []
                 searchResult.numOfTodos = 0

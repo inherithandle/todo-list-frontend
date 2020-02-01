@@ -27,7 +27,6 @@
 import Sidebar from './Sidebar.vue'
 import DatePicker from './DatePicker.vue'
 import DateUtil from '../js/date-util.js'
-import UrlUtil from '../js/url-util.js'
 import Cookies from 'js-cookie'
 
 const PROJECT_NOT_SELECTED = -1
@@ -110,27 +109,19 @@ export default {
         }
 
     },
-    created: async function() {
-        let googleCode = UrlUtil.getParameterByName('code')
-        if (googleCode != null) {
-            await this.processGoogleAuthorizationCode(googleCode)
-        }
-
+    beforeCreate: async function() {
         let accessToken = Cookies.get('access-token')
-        console.log(`access-token: ${accessToken}`)
-        let response = await this.$api.isValidAccessToken(accessToken)
-        if (response.data.login) {
+        let loginResponse = await this.$api.isValidAccessToken(accessToken)
+        if (loginResponse.data.login) {
             this.$store.commit({
                 type: 'login',
-                userId: response.data.userId,
-                login: response.data.login
+                userId: loginResponse.data.userId,
+                login: loginResponse.data.login
             })
             let projectResponse = await this.$api.getProjects()
             this.projects = projectResponse.data
-            console.dir(this.projects)
         } else {
-            console.log('not signed in.')
-            this.$router.push('/signin')
+            this.$router.replace('/signin')
         }
 
         this.$eventHub.$on('add-project-modal-submitted', this.addProject);
@@ -139,11 +130,6 @@ export default {
     beforeDestroy() {
         this.$eventHub.$off('add-project-modal-submitted');
         this.$eventHub.$off('modify-project-modal-submitted');
-    },
-    beforeCreate: async function() {
-
-    },
-    mounted: function() {
     },
     components: {
         DatePicker,
@@ -267,12 +253,6 @@ export default {
                 await this.$api.deleteProject(projectNo)
                 let projectIndex = this.projects.findIndex(p => p.projectNo == projectNo)
                 this.projects.splice(projectIndex, 1)
-            }
-        },
-        processGoogleAuthorizationCode: async function(code) {
-            let response = await this.$api.signinWithGoogle(code)
-            if (response.data.login) {
-                Cookies.set('access-token', response.data.accessToken)
             }
         }
     }

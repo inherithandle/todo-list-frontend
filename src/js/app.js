@@ -9,6 +9,8 @@ import TodoBody from "../components/TodoBody.vue";
 import SearchResult from '../components/SearchResult.vue'
 import Summary from '../components/Summary.vue'
 import Project from '../components/Project.vue'
+import GoogleSigninCallback from "../components/GoogleSigninCallback.vue";
+import Response404 from '../components/Response404.vue'
 import ApiLocal from './api-local'
 import ApiDev from './api-dev'
 import '@fortawesome/fontawesome-free/js/fontawesome'
@@ -36,17 +38,14 @@ Vue.use(Vuex) // Vuex requires Promise. If your supporting browsers do not imple
 
 const routes = [
   {
-    path: '/',
+    path: '',
     name: 'body',
     component: TodoBody,
     children: [
       {
         path: 'search',
         name: 'search',
-        component: SearchResult,
-        props: (route) => ({
-          query: route.query.query
-        }),
+        component: SearchResult
       },
       {
         path: '',
@@ -78,6 +77,11 @@ const routes = [
     component: Signup,
   },
   {
+    path: '/google-signin-callback',
+    name: 'google-signin-callback',
+    component: GoogleSigninCallback
+  },
+  {
     path: '/redirect-to-google',
     redirect: to => {
       let queryString = Object.keys(to.query).map(function(key) {
@@ -86,10 +90,16 @@ const routes = [
       window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${queryString}`
       return ''
     }
+  },
+  {
+    path: '*',
+    name: '404',
+    component: Response404
   }
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes // short for `routes: routes`
 })
 

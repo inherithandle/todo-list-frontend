@@ -32,8 +32,6 @@ export default {
       todoToBeModified: {}
     }
   },
-  mounted: async function() {
-  },
   methods: {
     modifyTodoModalShow: function(todo) {
       this.todoToBeModified = todo
