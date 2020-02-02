@@ -34,17 +34,28 @@ export default {
                     query: this.query
                 }
             })
-
         },
-        signoutClicked() {
+        async signoutClicked() {
+            const accessToken = Cookies.get('access-token')
+            if (!accessToken) {
+                this.$router.push({
+                    name: 'signin'
+                })
+            } else {
+                this.$api.deleteToken(accessToken).finally(r => {
+                    this.discardUser()
+                    this.$router.push({
+                        name: 'signin'
+                    })
+                })
+            }
+        },
+        discardUser() {
             Cookies.remove('access-token')
             this.$store.commit({
                 type: 'login',
                 userId: '',
                 login: false
-            })
-            this.$router.push({
-                name: 'signin'
             })
         }
     }

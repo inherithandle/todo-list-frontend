@@ -31,4 +31,16 @@ describe('regular expression', function() {
         assert.equal(!nullValue, true)
     })
 
+    it('null test', function() {
+        const vUndefined = undefined
+        const vNull = null
+        const vInteger = 1
+        const vString = 'hello world'
+
+        assert.equal(!vUndefined, true)
+        assert.equal(!vNull, true)
+        assert.equal(!vInteger, false)
+        assert.equal(!vString, false)
+    })
+
 })

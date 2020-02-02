@@ -221,4 +221,9 @@ export default {
     const API_NAME = '/signup'
     return axios.post(API_URL + API_NAME, user, this.POST_CONFIG)
   },
+  deleteToken: function (accessToken) {
+    const API_NAME = '/token'
+    const params = `?accessToken=${accessToken}`
+    return axios.delete(`${API_URL}${API_NAME}${params}`, this.POST_CONFIG)
+  }
 }
