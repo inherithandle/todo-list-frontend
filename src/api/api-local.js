@@ -174,5 +174,9 @@ export default {
       throw Error(`no such todo with todoId ${todoId}`)
     }
     return todo
+  },
+  deleteToken: function (accessToken) {
+    let response = {}
+    return Promise.resolve(response);
   }
 }
