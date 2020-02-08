@@ -20,10 +20,16 @@ module.exports = {
       index: '/html/index.html'
     }
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
   module: {
     rules: [
       {
         test: /\.(scss)$/,
+        include: path.resolve(__dirname, 'src/scss'),
         use: [
           {
             // Adds CSS to the DOM by injecting a `<style>` tag
@@ -65,6 +71,7 @@ module.exports = {
       },
 	  {
 	    test: /\.vue$/,
+        include: path.resolve(__dirname, 'src'),
 		use: 'vue-loader'
 	  }
     ]
@@ -88,7 +95,7 @@ const DEV_URL = 'http://localhost:8181'
 
 if (process.env.NODE_ENV == 'production') {
   module.exports.plugins.push(new webpack.DefinePlugin({
-    API_URL: JSON.stringify(PRODUCTION_URL)
+    API_URL: JSON.stringify(DEV_URL) // TODO: production server 세팅 후 PRODUCTION_URL로 변경하기
   }))
 } else if (process.env.NODE_ENV == 'development') {
   module.exports.plugins.push(new webpack.DefinePlugin({
