@@ -2,7 +2,6 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
@@ -18,11 +17,6 @@ module.exports = {
     index: '/html/index.html',
     historyApiFallback: {
       index: '/html/index.html'
-    }
-  },
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
     }
   },
   module: {
@@ -78,9 +72,12 @@ module.exports = {
   },
   plugins: [
 	new VueLoaderPlugin(),
-	new CopyPlugin([
-	  { from: 'src/html', to: './html' }
-	]),
+    new HtmlWebpackPlugin({
+      hash: true,
+      title: 'Todo list',
+      template: "src/html/index.html",
+      filename: "html/index.html"
+    }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",
