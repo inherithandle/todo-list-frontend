@@ -2,21 +2,18 @@
 const path = require('path');
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack')
 
 module.exports = {
-  mode: 'development',
-  devtool: 'inline-source-map',
   entry: './src/app.js',
   output: {
     filename: 'js/[name].js',
     path: path.resolve(__dirname, 'dist')
   },
-  devServer: {
-    contentBase: './dist',
-    index: '/html/index.html',
-    historyApiFallback: {
-      index: '/html/index.html'
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
     }
   },
   module: {
@@ -71,6 +68,7 @@ module.exports = {
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
 	new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       hash: true,
@@ -85,17 +83,4 @@ module.exports = {
       "window.$": "jquery"
     })
   ]
-}
-
-const PRODUCTION_URL = 'https://gtchoi.todolist.com'
-const DEV_URL = 'http://localhost:8181'
-
-if (process.env.NODE_ENV == 'production') {
-  module.exports.plugins.push(new webpack.DefinePlugin({
-    API_URL: JSON.stringify(DEV_URL) // TODO: production server 세팅 후 PRODUCTION_URL로 변경하기
-  }))
-} else if (process.env.NODE_ENV == 'development') {
-  module.exports.plugins.push(new webpack.DefinePlugin({
-    API_URL: JSON.stringify(DEV_URL)
-  }))
 }

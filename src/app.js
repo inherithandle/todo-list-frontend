@@ -7,14 +7,11 @@ import ApiLocal from './api/api-local'
 import ApiDev from './api/api-dev'
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
-import '@fortawesome/fontawesome-free/js/regular'
-import '@fortawesome/fontawesome-free/js/brands'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './scss/todo-body.css'
-import './scss/app.scss';
-import './scss/dashboard.css'
-import 'webpack-jquery-ui';
+import './scss/todo-body.css' // 작음
+import './scss/dashboard.css' // 작음
+import 'webpack-jquery-ui/datepicker';
 import 'webpack-jquery-ui/css';
 if (process.env.NODE_ENV == 'production') {
   Vue.prototype.$api = ApiDev
