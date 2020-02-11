@@ -4,48 +4,29 @@ const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: './src/app.js',
   output: {
     filename: 'js/[name].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   optimization: {
     splitChunks: {
       chunks: 'all'
-    }
+    },
+    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
   },
   module: {
     rules: [
       {
-        test: /\.(scss)$/,
-        include: path.resolve(__dirname, 'src/scss'),
-        use: [
-          {
-            // Adds CSS to the DOM by injecting a `<style>` tag
-            loader: 'style-loader'
-          },
-          {
-            // Interprets `@import` and `url()` like `import/require()` and will resolve them
-            loader: 'css-loader'
-          },
-          {
-            // Loader for webpack to process CSS with PostCSS
-            loader: 'postcss-loader',
-            options: {
-              plugins: function () {
-                return [
-                  require('autoprefixer')
-                ];
-              }
-            }
-          },
-          {
-            // Loads a SASS/SCSS file and compiles it to CSS
-            loader: 'sass-loader'
-          }
-        ]
+        test: /\.css$/,
+        // use: ['style-loader', 'css-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.(jpe?g|png|gif)$/i, // jquery datepicker가 png를 사용하고 있음. jquery 제가할때 같이 제거.
@@ -55,10 +36,6 @@ module.exports = {
           outputPath:'assets/images/'
           //the images will be emited to dist/assets/images/ folder
         }
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
       },
 	  {
 	    test: /\.vue$/,
@@ -81,6 +58,11 @@ module.exports = {
       jQuery: "jquery",
       "window.jQuery": "jquery'",
       "window.$": "jquery"
-    })
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'assets/css/[name].css',
+      chunkFilename: 'assets/css/[id].css',
+      hmr: process.env.NODE_ENV === 'development',
+    }),
   ]
 }
