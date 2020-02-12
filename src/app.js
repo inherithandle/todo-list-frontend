@@ -1,5 +1,8 @@
 import Vue from 'vue'
-import BootstrapVue from 'bootstrap-vue'
+import { ModalPlugin } from 'bootstrap-vue'
+import { ButtonPlugin } from 'bootstrap-vue'
+import { FormSelectPlugin } from 'bootstrap-vue'
+import { AlertPlugin } from 'bootstrap-vue'
 import Router from './router'
 import Store from './store'
 import App from './App.vue'
@@ -8,9 +11,8 @@ import ApiDev from './api/api-dev'
 import '@fortawesome/fontawesome-free/js/fontawesome'
 import '@fortawesome/fontawesome-free/js/solid'
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './scss/todo-body.css' // 작음
-import './scss/dashboard.css' // 작음
+import './scss/todo-body.css'
+import './scss/dashboard.css'
 import 'webpack-jquery-ui/datepicker';
 import 'webpack-jquery-ui/css';
 if (process.env.NODE_ENV == 'production') {
@@ -21,7 +23,10 @@ if (process.env.NODE_ENV == 'production') {
   Vue.prototype.$api = ApiLocal
 }
 Vue.prototype.$eventHub = new Vue(); // Global event bus
-Vue.use(BootstrapVue)
+Vue.use(ModalPlugin)
+Vue.use(ButtonPlugin)
+Vue.use(FormSelectPlugin)
+Vue.use(AlertPlugin)
 
 const app = new Vue({
   el: '#app',
