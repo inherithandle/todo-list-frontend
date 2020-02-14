@@ -8,13 +8,14 @@ import Store from './store'
 import App from './App.vue'
 import ApiLocal from './api/api-local'
 import ApiDev from './api/api-dev'
-import '@fortawesome/fontawesome-free/js/fontawesome'
-import '@fortawesome/fontawesome-free/js/solid'
 import 'bootstrap/dist/css/bootstrap.css'
 import './scss/todo-body.css'
 import './scss/dashboard.css'
-import 'webpack-jquery-ui/datepicker';
-import 'webpack-jquery-ui/css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+library.add(faTrash, faPencilAlt)
+
 if (process.env.NODE_ENV == 'production') {
   Vue.prototype.$api = ApiDev
 } else if (process.env.NODE_ENV == 'development') {

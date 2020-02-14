@@ -28,15 +28,6 @@ module.exports = {
         // use: ['style-loader', 'css-loader']
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
-      {
-        test: /\.(jpe?g|png|gif)$/i, // jquery datepicker가 png를 사용하고 있음. jquery 제가할때 같이 제거.
-        loader:"file-loader",
-        options:{
-          name:'[name].[ext]',
-          outputPath:'assets/images/'
-          //the images will be emited to dist/assets/images/ folder
-        }
-      },
 	  {
 	    test: /\.vue$/,
         include: path.resolve(__dirname, 'src'),
@@ -52,12 +43,6 @@ module.exports = {
       title: 'Todo list',
       template: "src/html/index.html",
       filename: "html/index.html"
-    }),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery'",
-      "window.$": "jquery"
     }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',

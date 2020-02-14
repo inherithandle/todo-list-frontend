@@ -56,7 +56,9 @@
                         {{ project.todos.filter(t => !t.completed).length }}
                     </div>
                     <div class="align-self-center">
-                        <button class="btn" @click.stop="projectDeleted(project.projectNo)"><i class="fas fa-trash"></i></button>
+                        <button class="btn" @click.stop="projectDeleted(project.projectNo)">
+                            <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
+                        </button>
                     </div>
                 </li>
             </ul>
@@ -68,6 +70,7 @@
 </template>
 
 <script>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 const NOT_SELECTED = -1
 export default {
     props: ['projects', 'numOfTodaySummary', 'numOfWeekSummary', 'numOfLaterSummary'],
@@ -78,6 +81,9 @@ export default {
                 active: 0
             }
         }
+    },
+    components: {
+        FontAwesomeIcon,
     },
     methods: {
         summaryClicked: function(index, labelForSummary) {

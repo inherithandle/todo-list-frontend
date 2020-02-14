@@ -28,14 +28,9 @@
                             {{ todo.dueDate.substring(0, 10) }}
                         </div>
                         <div class="align-self-center">
-                            <DatePicker
-                                    v-on:update-date="dateUpdated($event, todo.id, todo.projectNo)"
-                                    v-bind:picker-id="'todo-datepicker-' + todo.id"
-                                    input-type="icon"
-                            ></DatePicker>
-                        </div>
-                        <div class="align-self-center">
-                            <button @click="deleteTodoBtnClicked(todo.id, todo.projectNo)" class="btn"><i class="fas fa-trash"></i></button>
+                            <button @click="deleteTodoBtnClicked(todo.id, todo.projectNo)" class="btn">
+                                <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
+                            </button>
                         </div>
                     </li>
                 </ul>
@@ -47,12 +42,14 @@
 <script>
     import DatePicker from './VDatePicker.vue'
     import DateUtil from '../utils/date-util.js'
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
     export default {
         name: "Summary",
         props: ['summary-index', 'projects'],
         components: {
-            DatePicker
+            DatePicker,
+            FontAwesomeIcon,
         },
         mounted: function() {
         },

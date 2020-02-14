@@ -54,6 +54,9 @@ export default {
     getNowTimeStampString: function() {
         return this.getNowString() + 'T23:59:59.99'
     },
+    getTimeStampString: function(date) {
+       return this.getDateString(date) + 'T23:59:59.99'
+    },
     getDateString: function(date) {
         return [
             date.getFullYear(),

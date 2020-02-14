@@ -14,21 +14,16 @@
         </b-alert>
 
         <div class="d-flex mb-3">
-
+            <div class="mr-2">
+                <VueDatePicker
+                    input-class="form-control"
+                    :language="ko"
+                    format="마감일: yyyy-MM-dd"
+                    v-model="newTodo.dueDate"
+                ></VueDatePicker>
+            </div>
             <div class="mr-2 flex-grow-1">
                 <input v-model="newTodo.text" type="text" class="form-control todo-list-input" placeholder="할 일을 입력하세요.">
-            </div>
-
-            <div class="my-2 px-2" v-if="newTodo.dueDate.length">
-                {{ newTodo.dueDate.substring(0, 10) }}까지
-            </div>
-
-            <div class="mr-2">
-                <DatePicker
-                        v-on:update-date="newTodoDatePickerUpdated"
-                        picker-id="new-todo-datepicker"
-                        input-type="button"
-                ></DatePicker>
             </div>
 
             <div class="mr-2">
@@ -57,17 +52,14 @@
                         {{ todo.dueDate.substring(0, 10) }}
                     </div>
                     <div class="align-self-center">
-                        <DatePicker
-                                v-on:update-date="dateUpdated($event, todo.id, todo.projectNo)"
-                                v-bind:picker-id="'todo-datepicker-' + index"
-                                input-type="icon"
-                        ></DatePicker>
+                        <button class="btn" @click="modifyTodoBtnClicked(todo)">
+                            <FontAwesomeIcon icon="pencil-alt"></FontAwesomeIcon>
+                        </button>
                     </div>
                     <div class="align-self-center">
-                        <button class="btn" @click="modifyTodoBtnClicked(todo)"><i class="fas fa-pencil-alt"></i></button>
-                    </div>
-                    <div class="align-self-center">
-                        <button class="btn" @click="deleteTodoBtnClicked(todo.id, todo.projectNo)"><i class="fas fa-trash"></i></button>
+                        <button class="btn" @click="deleteTodoBtnClicked(todo.id, todo.projectNo)">
+                            <FontAwesomeIcon icon="trash"></FontAwesomeIcon>
+                        </button>
                     </div>
                 </li>
             </ul>
@@ -103,9 +95,14 @@
 <script>
     import DateUtil from '../utils/date-util.js'
     import DatePicker from './VDatePicker.vue'
+    import { ko } from 'vuejs-datepicker/dist/locale'
+    import VueDatePicker from 'vuejs-datepicker'
+    import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
     export default {
         components: {
-            DatePicker
+            DatePicker,
+            VueDatePicker,
+            FontAwesomeIcon,
         },
         props: ['project-index', 'projects'],
         data: function() {
@@ -115,10 +112,11 @@
                     text: '',
                     completed: false,
                     projectNo: 0,
-                    dueDate: DateUtil.getNowTimeStampString()
+                    dueDate: new Date()
                 },
                 showTodoFormError: false,
-                errors: []
+                errors: [],
+                ko: ko,
             }
         },
         name: "Project",
@@ -131,10 +129,6 @@
             }
         },
         methods: {
-            newTodoDatePickerUpdated: function(d) {
-                console.log(`newTodoDatePickerUpdated picked date: ${d}`)
-                this.newTodo.dueDate = d
-            },
             addTodoButtonClicked: async function() {
                 this.errors = []
                 if (!this.newTodo.text) {
@@ -150,7 +144,9 @@
                     todo.projectNo = this.projects[this.projectIndex].projectNo
                     todo.text = this.newTodo.text
                     todo.completed = false
-                    todo.dueDate = this.newTodo.dueDate
+                    console.log(`new todo due date: ${this.newTodo.dueDate}`)
+                    console.log(`new todo due date time stamp: ${DateUtil.getTimeStampString(this.newTodo.dueDate)}`)
+                    todo.dueDate = DateUtil.getTimeStampString(this.newTodo.dueDate)
                     this.$emit('new-todo-added', todo)
                     this.clearNewTodoObject()
                 } else {
@@ -184,7 +180,7 @@
                 this.newTodo.text = ''
                 this.newTodo.completed = false
                 this.newTodo.projectNo = 0
-                this.newTodo.dueDate = DateUtil.getNowTimeStampString()
+                this.newTodo.dueDate = new Date()
             }
         }
     }

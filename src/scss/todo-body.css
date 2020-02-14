@@ -150,3 +150,7 @@ input[type="checkbox"] {
     color: #fff
 }
 
+/* make read only textbox look white instead of gray.*/
+input[readonly]{
+    background-color:transparent !important;
+}

@@ -30,12 +30,12 @@
             <div class="my-4">
                 <label>마감일:</label>
                 <DatePicker
-                        :initial-date="todo.dueDate"
-                        v-on:update-date="datePickerUpdated"
-                        picker-id="modify-todo-datepicker"
-                        input-type="text"
-                        input-class="form-control"
-                ></DatePicker>
+                    v-model="todo.dueDate"
+                    :language="ko"
+                    format="yyyy-MM-dd"
+                    placeholder="날짜를 선택하세요."
+                    input-class="form-control"
+                />
             </div>
 
         </div>
@@ -43,7 +43,9 @@
 </template>
 
 <script>
-    import DatePicker from '../components/VDatePicker.vue'
+    import { ko } from 'vuejs-datepicker/dist/locale'
+    import DatePicker from 'vuejs-datepicker'
+    import DateUtil from '../utils/date-util'
     export default {
         name: "ModifyTodoModal",
         props: ['modal-id', 'todo', 'project-no'],
@@ -63,7 +65,8 @@
         },
         data: function() {
             return {
-                errors: []
+                errors: [],
+                ko: ko,
             }
         },
         methods: {
@@ -73,15 +76,13 @@
                     this.errors.push('할 일을 입력하세요.')
                     e.preventDefault()
                 } else {
+                    this.todo.dueDate = DateUtil.getTimeStampString(this.todo.dueDate)
                     this.$eventHub.$emit('modify-project-modal-submitted', this.todo);
                 }
-            },
-            datePickerUpdated: function(val) {
-                this.todo.dueDate = val
             }
         },
         components: {
-            DatePicker
+            DatePicker,
         }
     }
 </script>
