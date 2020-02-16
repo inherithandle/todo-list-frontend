@@ -10,6 +10,12 @@ axios.interceptors.response.use(response => {
   return response
 })
 
+const apiClient = axios.create({
+  baseURL: 'http://localhost:8181',
+  timeout: 1000,
+  withCredentials: true
+});
+
 export default {
   POST_CONFIG: {
     headers: {
@@ -67,7 +73,7 @@ export default {
 
     config = config || this.POST_CONFIG
 
-    return axios.get(API_URL + '/projects', config).catch(e => {
+    return apiClient.get('/projects', config).catch(e => {
       this.errorHandler(e, errorMessageConfig)
     })
   },
@@ -79,7 +85,7 @@ export default {
       unknownErrorMessage: '서버에 연결할 수 없습니다.',
       alertNeeded: true
     }
-    return axios.delete(API_URL + '/todo?id=' + todo.id, this.POST_CONFIG).catch(e => {
+    return apiClient.delete('/todo?id=' + todo.id).catch(e => {
       this.errorHandler(e, errorMessageConfig)
     })
   },
@@ -91,7 +97,7 @@ export default {
       unknownErrorMessage: '서버에 연결할 수 없습니다.',
       alertNeeded: true
     }
-    return axios.put(API_URL + '/todo', todo, this.POST_CONFIG).catch(e => {
+    return apiClient.put('/todo', todo).catch(e => {
       this.errorHandler(e, errorMessageConfig)
     })
   },
@@ -103,11 +109,11 @@ export default {
       unknownErrorMessage: '서버에 연결할 수 없습니다.',
       alertNeeded: true
     }
-    return axios.post(API_URL + '/todo', todo, this.POST_CONFIG).catch(e => {
+    return apiClient.post('/todo', todo).catch(e => {
       this.errorHandler(e, errorMessageConfig)
     })
   },
-  addProject: async function(project, errorMessageConfig) {
+  addProject: function(project, errorMessageConfig) {
     errorMessageConfig = errorMessageConfig || {
       loginRequiredMessage: '서버와의 세션이 종료되었습니다. 로그인이 필요합니다.',
       errorMessage4XX: '프론트엔드 에러로 인해 프로젝트를 추가할 수 없습니다.',
@@ -115,11 +121,9 @@ export default {
       unknownErrorMessage: '서버에 연결할 수 없습니다.',
       alertNeeded: true
     }
-
-    let response = await axios.post(API_URL + '/project', project, this.POST_CONFIG).catch(e => {
+    return apiClient.post('/project', project).catch(e => {
       this.errorHandler(e, errorMessageConfig)
     })
-    return response;
   },
   deleteProject: function(projectNo, errorMessageConfig) {
     errorMessageConfig = errorMessageConfig || {
@@ -129,7 +133,7 @@ export default {
       unknownErrorMessage: 'API 서버와 연결할 수 없습니다.',
       alertNeeded: true
     }
-    return axios.delete(API_URL + '/project?projectNo=' + projectNo, this.POST_CONFIG).catch(e => {
+    return apiClient.delete('/project?projectNo=' + projectNo).catch(e => {
       this.errorHandler(e, errorMessageConfig)
     })
   },
@@ -141,7 +145,7 @@ export default {
       unknownErrorMessage: 'API 서버와 연결할 수 없습니다.',
       alertNeeded: true
     }
-    return axios.put(API_URL + '/project', project, this.POST_CONFIG).catch( e => {
+    return apiClient.put('/project', project).catch( e => {
       this.errorHandler(e, errorMessageConfig)
     })
   },
@@ -156,8 +160,7 @@ export default {
     let body = {}
     body.userId = userId
     body.password = password
-    return axios.post(API_URL + '/login', body, this.POST_CONFIG).catch(e => {
-
+    return apiClient.post('/login', body).catch(e => {
       if (e.response.status == 400) {
         e.response.data.login = false
         return e.response
@@ -172,10 +175,10 @@ export default {
     notAuthorizedResponse.data = {}
     notAuthorizedResponse.data.login = false
 
-    if (accessToken === undefined) {
+    if (!accessToken) {
       return notAuthorizedResponse
     }
-    return axios.get(API_URL + '/token', this.POST_CONFIG).catch(error => {
+    return apiClient.get('/token').catch(error => {
       if (error.response.status == 401) {
         error.response.data.login = false
         return error.response
@@ -198,7 +201,7 @@ export default {
       body.authorizationCode = authCode
       body.tokenType = tokenType
 
-      return axios.post(API_URL + API_NAME, body, this.POST_CONFIG).catch(error => {
+      return apiClient.post(API_NAME, body).catch(error => {
         if (error.response.status == 401) {
           error.response.data.login = false
           return error.response
@@ -211,19 +214,19 @@ export default {
   isDuplicate: async function (userId) {
     const API_NAME = '/duplicate'
 
-    return axios.get(API_URL + API_NAME, {
+    return apiClient.get(API_NAME, {
       params: {
         userId: userId
       }
-    }, this.POST_CONFIG)
+    })
   },
   signup: function (user) {
     const API_NAME = '/signup'
-    return axios.post(API_URL + API_NAME, user, this.POST_CONFIG)
+    return apiClient.post(API_NAME, user)
   },
   deleteToken: function (accessToken) {
     const API_NAME = '/token'
     const params = `?accessToken=${accessToken}`
-    return axios.delete(`${API_URL}${API_NAME}${params}`, this.POST_CONFIG)
+    return apiClient.delete(`${API_NAME}${params}`)
   }
 }

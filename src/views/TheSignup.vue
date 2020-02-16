@@ -28,7 +28,7 @@
                             <input type="text" maxlength="15" v-model="form.userId" class="form-control" id="id" placeholder="ID 한글 불가, 첫 글자는 반드시 영어로 해주세요.">
                         </div>
                         <div class="col-3">
-                            <button @click="checkForDuplicate" class="btn btn-primary btn-block">중복 확인</button>
+                            <button @click.prevent="checkForDuplicate" class="btn btn-primary btn-block">중복 확인</button>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="mt-5 mx-auto">
-                    <button @click="submit" class="btn btn-lg btn-primary btn-block">회원가입</button>
+                    <button @click.prevent="submit" class="btn btn-lg btn-primary btn-block">회원가입</button>
                 </div>
 
             </form>

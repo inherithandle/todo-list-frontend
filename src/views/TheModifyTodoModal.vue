@@ -76,7 +76,9 @@
                     this.errors.push('할 일을 입력하세요.')
                     e.preventDefault()
                 } else {
-                    this.todo.dueDate = DateUtil.getTimeStampString(this.todo.dueDate)
+                    if (typeof(this.todo.dueDate) == 'Object') {
+                        this.todo.dueDate = DateUtil.getTimeStampString(this.todo.dueDate)
+                    }
                     this.$eventHub.$emit('modify-project-modal-submitted', this.todo);
                 }
             }
