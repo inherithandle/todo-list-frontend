@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import Cookies from 'js-cookie'
+    import Cookie from '../utils/cookie-util.js'
     export default {
         name: "GoogleSigninCallback",
         data: function() {
@@ -20,7 +20,7 @@
 
             let response = await this.$api.signinWithGoogle(code)
             if (response.data.login) {
-                Cookies.set('access-token', response.data.accessToken)
+                await Cookie.set('access-token', response.data.accessToken)
 
                 this.$store.commit({
                     type: 'login',

@@ -27,7 +27,7 @@
 import Sidebar from './TheSidebar.vue'
 import DatePicker from '../components/VDatePicker.vue'
 import DateUtil from '../utils/date-util.js'
-import Cookies from 'js-cookie'
+import Cookie from '../utils/cookie-util.js'
 
 const PROJECT_NOT_SELECTED = -1
 export default {
@@ -110,7 +110,7 @@ export default {
 
     },
     beforeCreate: async function() {
-        let accessToken = Cookies.get('access-token')
+        let accessToken = await Cookie.get('access-token')
         let loginResponse = await this.$api.isValidAccessToken(accessToken)
         if (loginResponse.data.login) {
             this.$store.commit({

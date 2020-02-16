@@ -18,7 +18,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import Cookies from 'js-cookie'
+import Cookie from '../utils/cookie-util.js'
 export default {
     computed: mapState(['user']),
     data: function() {
@@ -36,7 +36,7 @@ export default {
             })
         },
         async signoutClicked() {
-            const accessToken = Cookies.get('access-token')
+            const accessToken = await Cookie.get('access-token')
             if (!accessToken) {
                 this.$router.push({
                     name: 'signin'
@@ -50,8 +50,8 @@ export default {
                 })
             }
         },
-        discardUser() {
-            Cookies.remove('access-token')
+        async discardUser() {
+            await Cookie.remove('access-token')
             this.$store.commit({
                 type: 'login',
                 userId: '',

@@ -54,7 +54,7 @@
 </template>
 
 <script>
-    import Cookies from 'js-cookie'
+    import Cookie from '../utils/cookie-util.js'
     import SigninWithGoogleButton from "../components/VSigninWithGoogleButton.vue";
     export default {
         name: "Signin",
@@ -97,7 +97,7 @@
 
                 let response = await this.$api.login(this.userId, this.password)
                 if (response.data.login) {
-                    Cookies.set('access-token', response.data.accessToken)
+                    await Cookie.set('access-token', response.data.accessToken)
                     this.loginFailed = false
 
                     this.$store.commit({
