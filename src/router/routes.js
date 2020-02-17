@@ -1,11 +1,11 @@
 import Signin from '../views/TheSignin.vue'
 import Signup from '../views/TheSignup.vue'
 import TodoBody from "../views/TheTodoBody.vue";
-import SearchResult from '../components/VTodoBodySearchResult.vue'
 import Summary from '../components/VTodoBodySummary.vue'
 import Project from '../components/VTodoBodyProject.vue'
-import GoogleSigninCallback from "../views/TheGoogleSigninCallback.vue";
-import Response404 from '../views/TheResponse404.vue'
+const Response404 = () => import(/* webpackChunkName: "least-used-vue-components" */ '../views/TheResponse404.vue')
+const SearchResult = () => import(/* webpackChunkName: "least-used-vue-components" */ '../components/VTodoBodySearchResult.vue')
+const GoogleSigninCallback = () => import(/* webpackChunkName: "least-used-vue-components" */ '../views/TheGoogleSigninCallback.vue')
 
 const routes = [
     {

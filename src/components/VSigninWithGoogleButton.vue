@@ -14,7 +14,7 @@
                     response_type: 'code',
                     redirect_uri: 'http://localhost:8080/google-signin-callback',
                     scope: 'openid email',
-                    client_id: '768285404183-q27nonqv8mkccdfp5q4as2enfcpq4tdh.apps.googleusercontent.com', // TODO 상수화
+                    client_id: '768285404183-q27nonqv8mkccdfp5q4as2enfcpq4tdh.apps.googleusercontent.com',
                 }
                 this.$router.push({
                     path: '/redirect-to-google',

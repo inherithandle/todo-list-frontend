@@ -76,7 +76,7 @@
                     this.errors.push('할 일을 입력하세요.')
                     e.preventDefault()
                 } else {
-                    if (typeof(this.todo.dueDate) == 'Object') {
+                    if (typeof(this.todo.dueDate) == 'object') {
                         this.todo.dueDate = DateUtil.getTimeStampString(this.todo.dueDate)
                     }
                     this.$eventHub.$emit('modify-project-modal-submitted', this.todo);

@@ -87,7 +87,7 @@ export default {
     },
     methods: {
         summaryClicked: function(index, labelForSummary) {
-            // this statement prevent duplicate navigation
+            // this statement prevents duplicate navigation
             if (this.summary.active == index) {
                 return ;
             }

@@ -174,6 +174,8 @@ export default {
             if (response.data.projectNo > 0) {
                 project.projectNo = response.data.projectNo
                 this.projects.push(project)
+                const index = this.projects.length - 1
+                this.$refs.sidebar.projectClicked(index, this.projects[index].projectName)
             }
         },
         modifyTodo: async function(todoToBe) {
@@ -251,6 +253,7 @@ export default {
                 await this.$api.deleteProject(projectNo)
                 let projectIndex = this.projects.findIndex(p => p.projectNo == projectNo)
                 this.projects.splice(projectIndex, 1)
+                this.$refs.sidebar.projectClicked(0, this.projects[0].projectName)
             }
         }
     }
