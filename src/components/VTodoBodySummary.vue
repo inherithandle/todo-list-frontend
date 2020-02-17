@@ -40,7 +40,6 @@
 </template>
 
 <script>
-    import DatePicker from './VDatePicker.vue'
     import DateUtil from '../utils/date-util.js'
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -48,7 +47,6 @@
         name: "Summary",
         props: ['summary-index', 'projects'],
         components: {
-            DatePicker,
             FontAwesomeIcon,
         },
         mounted: function() {

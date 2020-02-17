@@ -25,7 +25,6 @@
 
 <script>
 import Sidebar from './TheSidebar.vue'
-import DatePicker from '../components/VDatePicker.vue'
 import DateUtil from '../utils/date-util.js'
 import Cookie from '../utils/cookie-util.js'
 
@@ -132,8 +131,7 @@ export default {
         this.$eventHub.$off('modify-project-modal-submitted');
     },
     components: {
-        DatePicker,
-        Sidebar
+        Sidebar,
     },
     methods: {
         summaryClicked: function(labelForSummary, index) {

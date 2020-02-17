@@ -94,13 +94,11 @@
 
 <script>
     import DateUtil from '../utils/date-util.js'
-    import DatePicker from './VDatePicker.vue'
     import { ko } from 'vuejs-datepicker/dist/locale'
     import VueDatePicker from 'vuejs-datepicker'
     import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
     export default {
         components: {
-            DatePicker,
             VueDatePicker,
             FontAwesomeIcon,
         },

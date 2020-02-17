@@ -49,7 +49,6 @@
 </template>
 
 <script>
-    import DatePicker from './VDatePicker.vue'
     import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
     export default {
         name: "SearchResult",
@@ -83,7 +82,6 @@
             },
         },
         components: {
-            DatePicker,
             FontAwesomeIcon,
         }
     }
