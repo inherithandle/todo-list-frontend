@@ -1,28 +1,15 @@
 import axios from 'axios'
 
-axios.interceptors.request.use(request => {
-  console.log('Starting Request', request)
-  return request
-})
-
-axios.interceptors.response.use(response => {
-  console.log('Response:', response)
-  return response
-})
-
 const getAuthorizationHeader = function() {
   let accessToken = sessionStorage.getItem('access-token');
-  if (!accessToken) {
-    window.location.replace = '/signin'
-  }
   return {
     Authorization: `Bearer ${accessToken}`,
   }
 }
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8181',
-  timeout: 1000,
+  baseURL: 'http://15.164.226.156:8181',
+  timeout: 7000,
   withCredentials: true
 });
 
@@ -258,8 +245,6 @@ export default {
   deleteToken: function (accessToken) {
     const API_NAME = '/token'
     const params = `?accessToken=${accessToken}`
-    let config = this.defaultErrorMessageConfig
-    config.headers = getAuthorizationHeader()
-    return apiClient.delete(`${API_NAME}${params}`, config)
+    return apiClient.delete(`${API_NAME}${params}`)
   }
 }

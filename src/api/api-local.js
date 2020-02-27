@@ -10,6 +10,10 @@ export default {
     {
       username: "joma",
       password: "jo"
+    },
+    {
+      username: 'tiger',
+      password: 'letmein'
     }
   ],
   projects: null,
@@ -101,11 +105,9 @@ export default {
 
     return response
   },
-  isValidAccessToken: async function() {
-    // return sessionStorage.getItem('accessToken') && accessToken === sessionStorage.getItem('accessToken')
+  isValidAccessToken: async function(accessToken) {
     let response = {}
     response.data = {}
-    let accessToken = this.getCookie('access-token')
     let found = this.user.find(u => u.username == accessToken)
 
     if (found) {

@@ -26,7 +26,6 @@
 <script>
 import Sidebar from './TheSidebar.vue'
 import DateUtil from '../utils/date-util.js'
-import Cookie from '../utils/cookie-util.js'
 
 const PROJECT_NOT_SELECTED = -1
 export default {
@@ -109,7 +108,7 @@ export default {
 
     },
     beforeCreate: async function() {
-        let accessToken = await Cookie.get('access-token')
+        let accessToken = sessionStorage.getItem('access-token');
         let loginResponse = await this.$api.isValidAccessToken(accessToken)
         if (loginResponse.data.login) {
             this.$store.commit({
@@ -119,12 +118,12 @@ export default {
             })
             let projectResponse = await this.$api.getProjects()
             this.projects = projectResponse.data
+
+            this.$eventHub.$on('add-project-modal-submitted', this.addProject);
+            this.$eventHub.$on('modify-project-modal-submitted', this.modifyTodo);
         } else {
             this.$router.replace('/signin')
         }
-
-        this.$eventHub.$on('add-project-modal-submitted', this.addProject);
-        this.$eventHub.$on('modify-project-modal-submitted', this.modifyTodo);
     },
     beforeDestroy() {
         this.$eventHub.$off('add-project-modal-submitted');

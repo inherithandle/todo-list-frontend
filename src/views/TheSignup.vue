@@ -55,7 +55,6 @@
 </template>
 
 <script>
-    import Cookie from '../utils/cookie-util.js'
     export default {
         name: "Signup",
         data: function() {
@@ -120,7 +119,7 @@
                 let response = await this.$api.signup(user)
 
                 if (response.data.login) {
-                    await Cookie.set('access-token', response.data.accessToken)
+                    sessionStorage.setItem('access-token', response.data.accessToken)
                     this.$store.commit({
                         type: 'login',
                         userId: this.userId,

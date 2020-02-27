@@ -39,7 +39,7 @@ module.exports = {
       hash: true,
       title: 'Todo list',
       template: "src/html/index.html",
-      filename: "html/index.html"
+      filename: "index.html"
     }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',

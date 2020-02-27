@@ -8,6 +8,7 @@ import Store from './store'
 import App from './App.vue'
 import ApiLocal from './api/api-local'
 import ApiDev from './api/api-dev'
+import ApiProd from './api/api-prod'
 import 'bootstrap/dist/css/bootstrap.css'
 import './scss/todo-body.css'
 import './scss/dashboard.css'
@@ -17,7 +18,7 @@ import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 library.add(faTrash, faPencilAlt)
 
 if (process.env.NODE_ENV == 'production') {
-  Vue.prototype.$api = ApiDev
+  Vue.prototype.$api = ApiProd
 } else if (process.env.NODE_ENV == 'development') {
   Vue.prototype.$api = ApiDev
 } else {
