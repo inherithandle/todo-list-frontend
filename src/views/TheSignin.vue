@@ -16,7 +16,7 @@
                 </b-alert>
 
                 <label for="userId" class="sr-only">ID</label>
-                <input type="text" id="userId" class="form-control" placeholder="ID" v-model="userId" autofocus="">
+                <input type="text" id="userId" maxlength="35" class="form-control" placeholder="ID" v-model="userId" autofocus="">
                 <label for="password" class="sr-only">Password</label>
                 <input type="password" id="password" class="form-control" placeholder="Password" v-model="password">
                 <div class="checkbox mb-3">

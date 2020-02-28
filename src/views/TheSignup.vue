@@ -25,7 +25,7 @@
                     <label for="id">ID</label>
                     <div class="row">
                         <div class="col-9">
-                            <input type="text" maxlength="15" v-model="form.userId" class="form-control" id="id" placeholder="ID 한글 불가, 첫 글자는 반드시 영어로 해주세요.">
+                            <input type="text" maxlength="35" v-model="form.userId" class="form-control" id="id" placeholder="ID 한글 불가, 첫 글자는 반드시 영어로 해주세요.">
                         </div>
                         <div class="col-3">
                             <button @click.prevent="checkForDuplicate" class="btn btn-primary btn-block">중복 확인</button>
@@ -131,10 +131,17 @@
             },
             checkForDuplicate: async function() {
                 this.errors = []
-                if (this.invalidUserId(this.form.userId)) {
-                    this.errors.push("ID는 8자 이상 15이하, 한글 불가, 첫 글자는 반드시 영문자로 시작해주세요.")
+                if (this.isEmail(this.form.userId)){
+                    this.errors.push("email은 사용하실 수 없습니다. 구글 이메일은 구글로 회원가입 버튼을 통해 가입해주세요.")
                     return ;
+                } else {
+                    if (this.invalidUserId(this.form.userId)) {
+                        this.errors.push("ID는 4자 이상 15자 이하, 한글 불가, 첫 글자는 반드시 영문자로 시작해주세요.")
+                        return ;
+                    }
                 }
+
+
 
                 if (this.isDuplicateCheckDone(this.form.userId)) {
                     return ;
@@ -154,6 +161,9 @@
             },
             invalidUserId: function(id) {
                 return !/^[A-Za-z][A-Za-z0-9]{3,15}$/.test(id)
+            },
+            isEmail: function(id) {
+                return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(id.toLowerCase());
             }
         }
     }

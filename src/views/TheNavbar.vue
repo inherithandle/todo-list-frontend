@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Todo App</a>
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#" @click="goToHomeClicked">Todo App</a>
       <form class="form-inline col-md-6 my-auto" v-if="user.login">
           <input v-model="query" class="form-control form-control-dark w-75 mr-2" type="text" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-sm-0" type="submit" @click.prevent="searchButtonClicked">Search</button>
@@ -55,6 +55,17 @@ export default {
                 userId: '',
                 login: false
             })
+        },
+        goToHomeClicked() {
+            if (!sessionStorage.getItem('access-token')) {
+                this.$router.replace({
+                    name: 'signin'
+                })
+            } else {
+                this.$router.replace({
+                    name: 'body'
+                })
+            }
         }
     }
 }
