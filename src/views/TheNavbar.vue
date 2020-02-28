@@ -50,8 +50,6 @@ export default {
             }
         },
         async discardUser() {
-            await Cookie.remove('access-token')
-
             this.$store.commit({
                 type: 'login',
                 userId: '',
