@@ -24,7 +24,8 @@ export default {
     }
     let deepCopiedProjects = JSON.parse(JSON.stringify(this.projects))
     let response = {}
-    response.data = deepCopiedProjects
+    response.data = {}
+    response.data.projects = deepCopiedProjects
     return response
   },
   deleteTodo: async function(todoObj) {

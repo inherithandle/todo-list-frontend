@@ -117,7 +117,7 @@ export default {
                 login: loginResponse.data.login
             })
             let projectResponse = await this.$api.getProjects()
-            this.projects = projectResponse.data
+            this.projects = projectResponse.data.projects
 
             this.$eventHub.$on('add-project-modal-submitted', this.addProject);
             this.$eventHub.$on('modify-project-modal-submitted', this.modifyTodo);
