@@ -14,7 +14,7 @@ const getAuthorizationHeader = function() {
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:8181',
-  timeout: 1000,
+  timeout: 7000,
   withCredentials: true
 });
 
@@ -238,8 +238,8 @@ export default {
         if (error.response.status == 401) {
           error.response.data.login = false
           return error.response
-        } else {
-          throw error
+        } else if (error.response.status >= 500) {
+          return error.response
         }
       })
     }

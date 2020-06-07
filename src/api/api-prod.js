@@ -223,8 +223,8 @@ export default {
         if (error.response.status == 401) {
           error.response.data.login = false
           return error.response
-        } else {
-          throw error
+        } else if (error.response.status >= 500) {
+          return error.response
         }
       })
     }
