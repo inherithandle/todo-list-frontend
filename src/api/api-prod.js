@@ -8,7 +8,7 @@ const getAuthorizationHeader = function() {
 }
 
 const apiClient = axios.create({
-  baseURL: 'http://15.164.226.156:8181',
+  baseURL: 'https://todolistapi.xyz:8181',
   timeout: 7000,
   withCredentials: true
 });
