@@ -12,7 +12,7 @@
             signinWithGoogleClicked: function() {
                 let query = {
                     response_type: 'code',
-                    redirect_uri: GOOGLE_SIGNIN_REDIRECT_URL,
+                    redirect_uri: GOOGLE_SIGNIN_REDIRECT_URI,
                     scope: 'openid email',
                     client_id: '768285404183-q27nonqv8mkccdfp5q4as2enfcpq4tdh.apps.googleusercontent.com',
                 }

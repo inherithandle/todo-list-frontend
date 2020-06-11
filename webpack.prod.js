@@ -14,10 +14,7 @@ module.exports = merge(common, {
   plugins: [
     new CopyPlugin([
       { from: 'src/docs/_redirects', to: '' }
-    ]),
-    new webpack.DefinePlugin({
-      'GOOGLE_SIGNIN_REDIRECT_URL': JSON.stringify('https://gtchoi-todolist.netlify.app/google-signin-callback')
-    })
+    ])
   ]
   // devtool: 'source-map',
 })
