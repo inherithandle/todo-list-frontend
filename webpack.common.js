@@ -4,6 +4,7 @@ const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack')
 
 module.exports = {
   entry: './src/app.js',
@@ -46,5 +47,8 @@ module.exports = {
       chunkFilename: 'assets/css/[id].css',
       hmr: process.env.NODE_ENV === 'development',
     }),
+    new webpack.DefinePlugin({
+      'GOOGLE_SIGNIN_REDIRECT_URL': JSON.stringify('http://localhost:8080/google-signin-callback')
+    })
   ]
 }

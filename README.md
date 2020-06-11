@@ -34,9 +34,8 @@ const apiClient = axios.create({
 - Spring Framework
 - JPA, Hibernate
 - MariaDB
-- this app hosted by Amazon S3
-- backend server hosted by Amazon EC2
+- this app hosted by Netlify
+- backend server hosted by Amazon Web Service, EC2
 
 ### 추가할 것들
-- [ ] HTTPS
-- [ ] Amazon S3에 도메인 연결
+- [x] HTTPS
