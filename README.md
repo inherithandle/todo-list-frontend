@@ -1,7 +1,7 @@
 # To-do list Application in Vue.js
 ![](src/docs/pics/todo-list-page.png)
 Vue.js로 작성한 to-do list app입니다. backend server의 REST API를 호출하여 유저가 기록한 Todo를 backend DB에 기록합니다.  
-Netlify에 배포된 to-do list app을 [gtchoi-todolist.netlify.app](gtchoi-todolist.netlify.app) 에서 확인가능합니다.
+Netlify에 배포된 to-do list app을 [gtchoi-todolist.netlify.app](https://gtchoi-todolist.netlify.app) 에서 확인가능합니다.
 ### 직접 실행하기
 동작 확인을 위해 백엔드 서버 없이 프론트엔드 단독으로 실행 가능합니다. Todo를 영구 저장하는 기능, 구글 로그인 기능, 회원가입 기능은 동작하지 않습니다.
 이 기능들을 테스트하려면 백엔드 서버와 연동해야 합니다.
