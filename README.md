@@ -12,7 +12,8 @@ npm run start:local
 
 로그인할 때,
 ID : tiger
-password : letmein123
+password : letmein
+http://localhost:8080
 ```
 
 ### backend와 연동하기 
